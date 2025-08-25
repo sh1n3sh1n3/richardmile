@@ -7,13 +7,13 @@ import { Box, Grid, Card, Stack, Container, Typography } from '@mui/material';
 // locales
 import { useLocales } from 'src/locales';
 // hooks
-import useOffSetTop from '../hooks/useOffSetTop';
 // assets
 import { collections } from 'src/assets/data';
 // config
 import { HEADER, SCROLL_HEIGHT } from 'src/config-global';
 // layouts
 import MainLayout from 'src/layouts/main';
+import useOffSetTop from '../hooks/useOffSetTop';
 // components
 import Filter from '../components/collections-filter';
 import ScrollProgress from '../components/scroll-progress';

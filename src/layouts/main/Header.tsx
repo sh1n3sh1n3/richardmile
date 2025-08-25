@@ -2,6 +2,9 @@
 import { useTheme } from '@mui/material/styles';
 import { Stack, AppBar, Toolbar, Box, Container } from '@mui/material';
 // hooks
+import Logo from 'src/components/logo';
+import MenuButton from 'src/components/menu-button';
+import { LinedTextItem } from 'src/components/lined-item';
 import useOffSetTop from '../../hooks/useOffSetTop';
 import useResponsive from '../../hooks/useResponsive';
 // config
@@ -9,9 +12,6 @@ import { HEADER, SCROLL_HEIGHT } from '../../config-global';
 // routes
 import { PATH_PAGE } from '../../routes/paths';
 // components
-import Logo from 'src/components/logo';
-import MenuButton from 'src/components/menu-button';
-import { LinedTextItem } from 'src/components/lined-item';
 import LanguagePopover from '../../components/language-popover';
 
 // ----------------------------------------------------------------------

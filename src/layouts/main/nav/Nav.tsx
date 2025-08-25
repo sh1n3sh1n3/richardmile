@@ -45,7 +45,7 @@ export default function Nav({ openNav, setOpenNav }: Props) {
     </Scrollbar>
   );
 
-  const easing = theme.transitions.easing;
+  const {easing} = theme.transitions;
   const durations = theme.transitions.duration;
 
   const desktopPaperSx = useMemo(

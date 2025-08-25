@@ -2,10 +2,10 @@ import { useState } from 'react';
 // @mui
 import { Stack } from '@mui/material';
 // locales
-import { useLocales } from '../../locales';
 // components
 import { NavItem } from 'src/components/nav-section';
 import { LinedTextItem } from 'src/components/lined-item';
+import { useLocales } from '../../locales';
 //
 import MenuPopover from '../menu-popover';
 

@@ -4,8 +4,7 @@ import { styled } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
-export const StyledItem = styled(Typography)(({ theme }) => {
-  return {
+export const StyledItem = styled(Typography)(({ theme }) => ({
     position: 'relative',
     textTransform: 'capitalize',
     transition: 'color 0.6s ease',
@@ -13,5 +12,4 @@ export const StyledItem = styled(Typography)(({ theme }) => {
     '&:hover': {
       color: theme.palette.text.disabled,
     }
-  };
-});
+  }));

@@ -32,7 +32,7 @@ export default function HomePage() {
           position: 'relative',
           bgcolor: 'background.default',
         }}
-      ></Box>
+       />
     </>
   );
 }

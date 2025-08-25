@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 // @mui
 import { Box, Grid, Stack, Divider, Container, Typography } from '@mui/material';
 // _mock
+import { NavItem } from 'src/components/nav-section';
 import { _socials } from '../../_mock/arrays';
 // components
 import Logo from '../../components/logo';
-import { NavItem } from 'src/components/nav-section';
 import LanguageBar from '../../components/language-bar';
 import SocialIcons from '../../components/social-icons';
 //

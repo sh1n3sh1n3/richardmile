@@ -1,9 +1,9 @@
 import { m } from 'framer-motion';
 import { alpha, Box, styled, Typography } from '@mui/material';
 // utils
+import Iconify from 'src/components/iconify';
 import { bgGradient } from '../utils/cssStyles';
 // components
-import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

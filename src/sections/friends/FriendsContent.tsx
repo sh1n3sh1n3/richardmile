@@ -5,9 +5,9 @@ import { Container, Typography, Grid, Card } from '@mui/material';
 // locales
 import { useLocales } from 'src/locales';
 // hooks
+import Image from 'src/components/image';
 import useResponsive from '../../hooks/useResponsive';
 // components
-import Image from 'src/components/image';
 import { MotionContainer, varFade } from '../../components/animate';
 //
 import { StyledScaleUpImage, StyledRoot } from '../styls';

@@ -2,12 +2,12 @@ import { forwardRef } from 'react';
 // @mui
 import { Box, IconButton, Stack } from '@mui/material';
 // hooks
+import { HEADER } from 'src/config-global';
 import useResponsive from '../../hooks/useResponsive';
 //
 import Iconify from '../iconify';
 import { MenuButtonProps } from './types';
 import { LinedTextItem } from '../lined-item';
-import { HEADER } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 

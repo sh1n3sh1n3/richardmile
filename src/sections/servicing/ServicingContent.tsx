@@ -6,9 +6,9 @@ import { Box, Container, Typography, Grid, TextField, MenuItem } from '@mui/mate
 // locales
 import { useLocales } from 'src/locales';
 // hooks
+import Image from 'src/components/image';
 import useResponsive from '../../hooks/useResponsive';
 // components
-import Image from 'src/components/image';
 import { MotionContainer, varFade } from '../../components/animate';
 //
 import {
@@ -26,12 +26,9 @@ import {
 
 // ----------------------------------------------------------------------
 
-const MODELS = [{ label: 'RM 001 Tourbillon', value: '001' }];
-
 export default function ServicingContent() {
   const theme = useTheme();
   const { translate } = useLocales();
-  const isDesktop = useResponsive('up', 'md');
 
   const [model, setModel] = useState('');
 
@@ -106,7 +103,7 @@ export default function ServicingContent() {
                 </StyledSectionContent>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
                   Each piece is finished and assembled by hand, reflecting what is best in the
-                  culture of 'Haute Horlogerie'.
+                  culture of &apos;Haute Horlogerie&apos;.
                 </StyledSectionContent>
               </StyledSection>
             </m.div>

@@ -10,9 +10,9 @@ import {
 // components
 import LanguageBar from 'src/components/language-bar';
 //
+import SocialIcons from 'src/components/social-icons/SocialIcons';
 import NavItem from './NavItem';
 import { NavSectionProps } from './types';
-import SocialIcons from 'src/components/social-icons/SocialIcons';
 
 // ----------------------------------------------------------------------
 

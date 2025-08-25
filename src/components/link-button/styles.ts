@@ -4,8 +4,7 @@ import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export const StyledButton = styled(Button)(({ theme }) => {
-  return {
+export const StyledButton = styled(Button)(({ theme }) => ({
     borderRadius: 50,
     overflow: 'hidden',
     alignItems: 'center',
@@ -29,5 +28,4 @@ export const StyledButton = styled(Button)(({ theme }) => {
         opacity: 0,
       },
     },
-  };
-});
+  }));

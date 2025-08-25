@@ -1,14 +1,12 @@
 // next
 import { useRouter } from 'next/router';
 // @mui
-import { styled } from '@mui/material/styles';
 import { Box, Container, Stack, Typography } from '@mui/material';
 // locales
 import { useLocales } from 'src/locales';
 // components
-import Iconify from '../../components/iconify';
-import { MotionContainer } from '../../components/animate';
 import { PATH_PAGE } from 'src/routes/paths';
+import { MotionContainer } from '../../components/animate';
 import {
   StyledHero,
   StyledHeroVideo,
@@ -52,8 +50,8 @@ export default function BrandHero() {
               <Box sx={{ maxWidth: 460 }}>
                 <Typography variant="h1">{`${translate('The Brand')}`}</Typography>
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                  The first watch to carry Richard Mille's name, the RM 001 Tourbillon, launched the
-                  millennium and marked the beginning of a new era in watchmaking.
+                  The first watch to carry Richard Mille&apos;s name, the RM 001 Tourbillon,
+                  launched the millennium and marked the beginning of a new era in watchmaking.
                 </Typography>
               </Box>
 

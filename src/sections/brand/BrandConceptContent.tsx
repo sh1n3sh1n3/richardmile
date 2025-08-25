@@ -5,9 +5,9 @@ import { Box, Container, Typography, Grid } from '@mui/material';
 // locales
 import { useLocales } from 'src/locales';
 // hooks
+import Image from 'src/components/image';
 import useResponsive from '../../hooks/useResponsive';
 // components
-import Image from 'src/components/image';
 import { MotionContainer, varFade } from '../../components/animate';
 //
 import {
@@ -37,7 +37,6 @@ const StyledQuoteAuthor = styled(Typography)(({ theme }) => ({
 export default function BrandConceptContent() {
   const theme = useTheme();
   const { translate } = useLocales();
-  const isDesktop = useResponsive('up', 'md');
 
   return (
     <StyledRoot>
@@ -52,12 +51,12 @@ export default function BrandConceptContent() {
                 <StyledSectionContent>
                   The RM 001 Tourbillon, the first watch ever to bear the Richard Mille name,
                   literally and figuratively launched the millennium: the year was 2001, and the
-                  model marked the beginning of a new era in watchmaking. Today, the collection's
-                  more than eighty models point resolutely towards the future, whilst holding
-                  steadfast to the time-honoured traditions of fine watchmaking.
+                  model marked the beginning of a new era in watchmaking. Today, the
+                  collection&apos;s more than eighty models point resolutely towards the future,
+                  whilst holding steadfast to the time-honoured traditions of fine watchmaking.
                 </StyledSectionContent>
                 <StyledSectionContent>
-                  Like that landmark watch, the RM 001, Richard Mille's success is a product of
+                  Like that landmark watch, the RM 001, Richard Mille&apos;s success is a product of
                   three crucial elements: the best of cutting edge innovative technology, a strong
                   artistic and architectural dimension, and watches designed to be robust and easy
                   to use, yet also highly sophisticated. Each piece is finished and assembled by
@@ -129,9 +128,9 @@ export default function BrandConceptContent() {
             <m.div variants={varFade().inUp}>
               <StyledSection>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
-                  'I wanted to design utterly innovative products that would break with the
+                  &apos;I wanted to design utterly innovative products that would break with the
                   prevailing classicism and adhere to a single principle: nothing is too good for
-                  the result.''
+                  the result.&apos;
                 </StyledSectionContent>
                 <StyledQuoteAuthor>Richard Mille</StyledQuoteAuthor>
               </StyledSection>
@@ -179,8 +178,8 @@ export default function BrandConceptContent() {
             <m.div variants={varFade().inUp}>
               <StyledSection sx={{ pt: 30 }}>
                 <StyledSectionContent>
-                  'A Richard Mille watch is the expression of our love for all things technical, and
-                  for automobiles and aeronautics in particular.'
+                  &apos;A Richard Mille watch is the expression of our love for all things
+                  technical, and for automobiles and aeronautics in particular.&apos;
                 </StyledSectionContent>
               </StyledSection>
             </m.div>
@@ -207,8 +206,8 @@ export default function BrandConceptContent() {
               <StyledSection>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
                   A watch designed by Richard Mille is characterised by the absence of superfluity.
-                  Just as we find in today's high-speed racing cars, function dictates form; there
-                  is neither use nor room for an approach driven solely by aesthetics. For the
+                  Just as we find in today&apos;s high-speed racing cars, function dictates form;
+                  there is neither use nor room for an approach driven solely by aesthetics. For the
                   brand, every pinion, lever and spring must fulfil its mission, meeting the highest
                   standards of security and precision.
                 </StyledSectionContent>
@@ -272,10 +271,11 @@ export default function BrandConceptContent() {
                 </StyledSectionContent>
                 <StyledSectionContent>
                   As a result of research conducted in the world of technology and the methods
-                  applied to address the forces at play on the racetrack, Richard Mille's watches
-                  have undergone improvements in baseplate rigidity, in the energy transmission of
-                  the going train gear teeth, and the addition of greater flexibility to specific
-                  parts of the movement, providing supplementary shock resistance.
+                  applied to address the forces at play on the racetrack, Richard Mille&apos;s
+                  watches have undergone improvements in baseplate rigidity, in the energy
+                  transmission of the going train gear teeth, and the addition of greater
+                  flexibility to specific parts of the movement, providing supplementary shock
+                  resistance.
                 </StyledSectionContent>
               </StyledSection>
             </m.div>
@@ -298,13 +298,13 @@ export default function BrandConceptContent() {
                 <StyledSectionContent>
                   The creation of a timepiece demands a balancing act between total volume, the
                   physical requirements of the movement and its specific features, however, the
-                  user's comfort is equally essential.
+                  user&apos;s comfort is equally essential.
                 </StyledSectionContent>
                 <StyledSectionContent>
                   This was at the heart of the original tonneau shape developed by Richard Mille at
-                  the brand's beginning. Regardless of whether a particular RM model is slim or
-                  massive, its shape ensures optimal comfort, never interfering with the owner's
-                  physical movements.
+                  the brand&apos;s beginning. Regardless of whether a particular RM model is slim or
+                  massive, its shape ensures optimal comfort, never interfering with the
+                  owner&apos;s physical movements.
                 </StyledSectionContent>
               </StyledSection>
             </m.div>
@@ -451,9 +451,9 @@ export default function BrandConceptContent() {
               <m.div variants={varFade().inUp}>
                 <StyledSection>
                   <StyledSectionContent sx={{ color: 'common.black' }}>
-                    'The brand has one foot in the 19th century—because we are faithful to the great
-                    Swiss tradition of horology, with extremely complex movements assembled and
-                    finished by hand—and the other foot in the 21st century.'
+                    &apos;The brand has one foot in the 19th century—because we are faithful to the
+                    great Swiss tradition of horology, with extremely complex movements assembled
+                    and finished by hand—and the other foot in the 21st century.&apos;
                   </StyledSectionContent>
                 </StyledSection>
               </m.div>

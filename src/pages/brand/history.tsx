@@ -3,11 +3,11 @@ import Head from 'next/head';
 // @mui
 import { Box } from '@mui/material';
 // components
-import ScrollProgress from '../../components/scroll-progress';
 // layouts
 import MainLayout from 'src/layouts/main';
 // sections
 import { BrandConceptContent, BrandConceptHero } from 'src/sections/brand';
+import ScrollProgress from '../../components/scroll-progress';
 
 // ----------------------------------------------------------------------
 

@@ -5,9 +5,9 @@ import { Box } from '@mui/material';
 // layouts
 import MainLayout from 'src/layouts/main';
 // components
+import { FriendsHero, FriendsContent } from 'src/sections/friends';
 import ScrollProgress from '../components/scroll-progress';
 // sections
-import { FriendsHero, FriendsContent } from 'src/sections/friends';
 
 // ----------------------------------------------------------------------
 

@@ -131,7 +131,7 @@ export default function palette(themeMode: 'light' | 'dark') {
     mode: 'dark',
     text: {
       primary: '#FFFFFF',
-      secondary: '#E0E0E0',//#373737
+      secondary: '#E0E0E0',// #373737
       disabled: '#757575',
     },
     background: {

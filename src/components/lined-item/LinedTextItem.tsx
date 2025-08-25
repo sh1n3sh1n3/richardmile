@@ -16,13 +16,11 @@ export default function LinedTextItem({ item, ...other }: NavItemProps) {
 
   const renderContent = <StyledItem {...other}>{`${translate(title)}`}</StyledItem>;
 
-  const renderItem = () => {
-    return (
+  const renderItem = () => (
       <Link component={NextLink} href={path} underline="none">
         {renderContent}
       </Link>
     );
-  };
 
   return <> {renderItem()} </>;
 }

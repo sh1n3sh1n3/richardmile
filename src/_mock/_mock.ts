@@ -50,6 +50,12 @@ const _mock = {
     age: (index: number) => age[index],
     price: (index: number) => price[index],
   },
+  image: {
+    cover: (index: number) => `/assets/images/covers/cover_${index}.jpg`,
+    feed: (index: number) => `/assets/images/feeds/feed_${index}.jpg`,
+    product: (index: number) => `/assets/images/products/product_${index}.jpg`,
+    avatar: (index: number) => `/assets/images/avatars/avatar_${index}.jpg`,
+  },
 };
 
 export default _mock;

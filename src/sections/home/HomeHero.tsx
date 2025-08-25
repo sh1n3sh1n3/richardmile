@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { m, useScroll } from 'framer-motion';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -63,7 +63,43 @@ export default function HomeHero() {
     [scrollYProgress]
   );
 
-  const scrollToNextSection = () => {
+  const sections = useMemo(
+    () => [
+      {
+        id: 1,
+        hasVideo: true,
+        src: 'https://video.richardmille.com/mobile/the-brand-history-rm-homepage.mp4',
+      },
+      {
+        id: 2,
+        hasVideo: true,
+        src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
+      },
+      {
+        id: 3,
+        hasVideo: true,
+        src: 'https://video.richardmille.com/mobile/header-collection-women-04_1.mp4',
+      },
+      {
+        id: 4,
+        hasVideo: true,
+        src: 'https://video.richardmille.com/mobile/30-01-LMC_packshot_169_header-1.mp4',
+      },
+      {
+        id: 5,
+        hasVideo: true,
+        src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
+      },
+      {
+        id: 6,
+        hasVideo: true,
+        src: 'https://video.richardmille.com/mobile/RMB01_packshot_169_header-2.mp4',
+      },
+    ],
+    []
+  );
+
+  const scrollToNextSection = useCallback(() => {
     if (currentSection < sections.length - 1 && !isScrolling) {
       setIsScrolling(true);
       // Set loading state for the next section if it has a video
@@ -103,10 +139,10 @@ export default function HomeHero() {
       });
       setTimeout(() => setIsScrolling(false), 1000);
     }
-  };
+  }, [currentSection, isScrolling, sections]);
 
   // Handle scroll to previous section
-  const scrollToPrevSection = () => {
+  const scrollToPrevSection = useCallback(() => {
     if (currentSection > 0 && !isScrolling) {
       setIsScrolling(true);
       // Set loading state for the previous section if it has a video
@@ -138,7 +174,7 @@ export default function HomeHero() {
       // Reset scrolling state after animation
       setTimeout(() => setIsScrolling(false), 1000);
     }
-  };
+  }, [currentSection, isScrolling, sections]);
 
   const handleVideoLoad = (sectionIndex: number) => {
     setVideoLoadingStates((prev) => {
@@ -182,16 +218,14 @@ export default function HomeHero() {
       if (e.deltaY > 0) {
         // Scrolling down
         scrollToNextSection();
+      } else if (scrollYProgress.get() === 1) {
+        // Scrolling up - at the end, go to top
+        setIsScrolling(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => setIsScrolling(false), 1000);
       } else {
-        // Scrolling up
-        if (scrollYProgress.get() === 1) {
-          setIsScrolling(true);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          setTimeout(() => setIsScrolling(false), 1000);
-          return;
-        } else {
-          scrollToPrevSection();
-        }
+        // Scrolling up - go to previous section
+        scrollToPrevSection();
       }
     };
 
@@ -200,7 +234,7 @@ export default function HomeHero() {
     return () => {
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [currentSection, isScrolling]);
+  }, [currentSection, isScrolling, scrollToNextSection, scrollToPrevSection, scrollYProgress]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -217,7 +251,6 @@ export default function HomeHero() {
           setIsScrolling(true);
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setTimeout(() => setIsScrolling(false), 1000);
-          return;
         } else {
           scrollToPrevSection();
         }
@@ -226,7 +259,7 @@ export default function HomeHero() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSection, isScrolling]);
+  }, [currentSection, isScrolling, scrollToNextSection, scrollToPrevSection, scrollYProgress]);
 
   // Auto-advance to next section after video duration
   useEffect(() => {
@@ -237,80 +270,45 @@ export default function HomeHero() {
     }, 8000); // 8 seconds per section
 
     return () => clearTimeout(autoAdvanceTimer);
-  }, [currentSection, isScrolling]);
-
-  const sections = [
-    {
-      id: 1,
-      hasVideo: true,
-      src: 'https://video.richardmille.com/mobile/the-brand-history-rm-homepage.mp4',
-    },
-    {
-      id: 2,
-      hasVideo: true,
-      src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
-    },
-    {
-      id: 3,
-      hasVideo: true,
-      src: 'https://video.richardmille.com/mobile/header-collection-women-04_1.mp4',
-    },
-    {
-      id: 4,
-      hasVideo: true,
-      src: 'https://video.richardmille.com/mobile/30-01-LMC_packshot_169_header-1.mp4',
-    },
-    {
-      id: 5,
-      hasVideo: true,
-      src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
-    },
-    {
-      id: 6,
-      hasVideo: true,
-      src: 'https://video.richardmille.com/mobile/RMB01_packshot_169_header-2.mp4',
-    },
-  ];
+  }, [currentSection, isScrolling, scrollToNextSection, sections.length]);
 
   return (
-    <>
-      <div className="page-wrapper page-wrapper--no-padding" ref={containerRef}>
-        <div className="page-wrapper__content">
-          <div className="home">
-            <div className="home__container" style={{ height: '100vh' }} ref={sectionsRef}>
-              {sections.map((item, index) => (
-                <m.section
-                  key={item.id}
-                  className="home__section"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: isLoaded ? 1 : 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                >
-                  <HomeVideo
-                    onVideoLoad={() => handleVideoLoad(index)}
-                    onVideoPlay={() => handleVideoPlay(index)}
-                    onVideoPause={() => handleVideoPause(index)}
-                    videoSrc={item.src}
-                  />
+    <div className="page-wrapper page-wrapper--no-padding" ref={containerRef}>
+      <div className="page-wrapper__content">
+        <div className="home">
+          <div className="home__container" style={{ height: '100vh' }} ref={sectionsRef}>
+            {sections.map((item, index) => (
+              <m.section
+                key={item.id}
+                className="home__section"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isLoaded ? 1 : 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+              >
+                <HomeVideo
+                  onVideoLoad={() => handleVideoLoad(index)}
+                  onVideoPlay={() => handleVideoPlay(index)}
+                  onVideoPause={() => handleVideoPause(index)}
+                  videoSrc={item.src}
+                />
 
-                  {/* Processing button for each video section */}
-                  <ProcessingButton
-                    next={scrollToNextSection}
-                    isVideoLoading={videoLoadingStates[index]}
-                    isVideoPlaying={videoPlayingStates[index]}
-                    canNavigate={!isScrolling}
-                    onClick={() => scrollToNextSection()}
-                    isScrolling={isScrolling}
-                    isStop={currentSection === 5}
-                  />
-                </m.section>
-              ))}
-            </div>
+                {/* Processing button for each video section */}
+                <ProcessingButton
+                  next={scrollToNextSection}
+                  isVideoLoading={videoLoadingStates[index]}
+                  isVideoPlaying={videoPlayingStates[index]}
+                  canNavigate={!isScrolling}
+                  onClick={() => scrollToNextSection()}
+                  isScrolling={isScrolling}
+                  isStop={currentSection === 5}
+                />
+              </m.section>
+            ))}
           </div>
         </div>
-
-        {/* Footer - separate from scroll-snap container */}
       </div>
-    </>
+
+      {/* Footer - separate from scroll-snap container */}
+    </div>
   );
 }
