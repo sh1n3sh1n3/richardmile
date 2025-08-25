@@ -1,0 +1,10 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .rm-text { font-family: 'Arial Black', 'Helvetica Bold', sans-serif; font-weight: 900; }
+    </style>
+  </defs>
+  <rect width="192" height="192" fill="#000000"/>
+  <text x="96" y="120" class="rm-text" font-size="72" text-anchor="middle" fill="#ffffff">R</text>
+  <text x="96" y="168" class="rm-text" font-size="72" text-anchor="middle" fill="#ffffff">M</text>
+</svg>

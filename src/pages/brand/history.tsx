@@ -1,0 +1,40 @@
+// next
+import Head from 'next/head';
+// @mui
+import { Box } from '@mui/material';
+// components
+import ScrollProgress from '../../components/scroll-progress';
+// layouts
+import MainLayout from 'src/layouts/main';
+// sections
+import { BrandConceptContent, BrandConceptHero } from 'src/sections/brand';
+
+// ----------------------------------------------------------------------
+
+BrandHistoryPage.getLayout = (page: React.ReactElement) => <MainLayout>{page}</MainLayout>;
+
+// ----------------------------------------------------------------------
+
+export default function BrandHistoryPage() {
+  return (
+    <>
+      <Head>
+        <title>The Brand | Richard Mille</title>
+      </Head>
+
+      <ScrollProgress />
+
+      <BrandConceptHero />
+      
+      <Box
+        sx={{
+          overflow: 'visible',
+          position: 'relative',
+          bgcolor: 'background.default',
+        }}
+      >
+        <BrandConceptContent />
+      </Box>
+    </>
+  );
+}

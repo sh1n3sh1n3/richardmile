@@ -1,0 +1,750 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #000000;
+    /* Direct CSS for bg-luxury-black */
+    color: #ffffff;
+    /* Direct CSS for text-luxury-white */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* Direct CSS for font-sans */
+    overflow-x: hidden;
+    /* Allow vertical scroll but prevent horizontal */
+  }
+}
+
+@layer components {
+  .luxury-gradient {
+    background: linear-gradient(135deg, #d4af37 0%, #b76e79 50%, #c0c0c0 100%);
+  }
+
+  .glass-effect {
+    backdrop-filter: blur(12px);
+    /* Direct CSS for backdrop-blur-md */
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Direct CSS for bg-white/10 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Direct CSS for border border-white/20 */
+  }
+}
+
+@layer utilities {
+  /* Luxury Color Utilities */
+  .bg-luxury-black {
+    background-color: #000000;
+  }
+
+  .bg-luxury-white {
+    background-color: #ffffff;
+  }
+
+  .bg-luxury-gold {
+    background-color: #d4af37;
+  }
+
+  .bg-luxury-platinum {
+    background-color: #e5e4e2;
+  }
+
+  .bg-luxury-carbon {
+    background-color: #1a1a1a;
+  }
+
+  .bg-luxury-titanium {
+    background-color: #c0c0c0;
+  }
+
+  .bg-luxury-rosegold {
+    background-color: #b76e79;
+  }
+
+  .text-luxury-black {
+    color: #000000;
+  }
+
+  .text-luxury-white {
+    color: #ffffff;
+  }
+
+  .text-luxury-gold {
+    color: #d4af37;
+  }
+
+  .text-luxury-platinum {
+    color: #e5e4e2;
+  }
+
+  .text-luxury-carbon {
+    color: #1a1a1a;
+  }
+
+  .text-luxury-titanium {
+    color: #c0c0c0;
+  }
+
+  .text-luxury-rosegold {
+    color: #b76e79;
+  }
+
+  .border-luxury-black {
+    border-color: #000000;
+  }
+
+  .border-luxury-white {
+    border-color: #ffffff;
+  }
+
+  .border-luxury-gold {
+    border-color: #d4af37;
+  }
+
+  .border-luxury-platinum {
+    border-color: #e5e4e2;
+  }
+
+  .border-luxury-carbon {
+    border-color: #1a1a1a;
+  }
+
+  .border-luxury-titanium {
+    border-color: #c0c0c0;
+  }
+
+  .border-luxury-rosegold {
+    border-color: #b76e79;
+  }
+
+  /* Luxury Gray Scale */
+  .bg-luxury-gray-50 {
+    background-color: #fafafa;
+  }
+
+  .bg-luxury-gray-100 {
+    background-color: #f5f5f5;
+  }
+
+  .bg-luxury-gray-200 {
+    background-color: #e5e5e5;
+  }
+
+  .bg-luxury-gray-300 {
+    background-color: #d4d4d4;
+  }
+
+  .bg-luxury-gray-400 {
+    background-color: #a3a3a3;
+  }
+
+  .bg-luxury-gray-500 {
+    background-color: #737373;
+  }
+
+  .bg-luxury-gray-600 {
+    background-color: #525252;
+  }
+
+  .bg-luxury-gray-700 {
+    background-color: #404040;
+  }
+
+  .bg-luxury-gray-800 {
+    background-color: #262626;
+  }
+
+  .bg-luxury-gray-900 {
+    background-color: #171717;
+  }
+
+  .text-luxury-gray-50 {
+    color: #fafafa;
+  }
+
+  .text-luxury-gray-100 {
+    color: #f5f5f5;
+  }
+
+  .text-luxury-gray-200 {
+    color: #e5e5e5;
+  }
+
+  .text-luxury-gray-300 {
+    color: #d4d4d4;
+  }
+
+  .text-luxury-gray-400 {
+    color: #a3a3a3;
+  }
+
+  .text-luxury-gray-500 {
+    color: #737373;
+  }
+
+  .text-luxury-gray-600 {
+    color: #525252;
+  }
+
+  .text-luxury-gray-700 {
+    color: #404040;
+  }
+
+  .text-luxury-gray-800 {
+    color: #262626;
+  }
+
+  .text-luxury-gray-900 {
+    color: #171717;
+  }
+
+  .border-luxury-gray-50 {
+    border-color: #fafafa;
+  }
+
+  .border-luxury-gray-100 {
+    border-color: #f5f5f5;
+  }
+
+  .border-luxury-gray-200 {
+    border-color: #e5e5e5;
+  }
+
+  .border-luxury-gray-300 {
+    border-color: #d4d4d4;
+  }
+
+  .border-luxury-gray-400 {
+    border-color: #a3a3a3;
+  }
+
+  .border-luxury-gray-500 {
+    border-color: #737373;
+  }
+
+  .border-luxury-gray-600 {
+    border-color: #525252;
+  }
+
+  .border-luxury-gray-700 {
+    border-color: #404040;
+  }
+
+  .border-luxury-gray-800 {
+    border-color: #262626;
+  }
+
+  .border-luxury-gray-900 {
+    border-color: #171717;
+  }
+
+  /* Font Family Utilities */
+  .font-display {
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  .font-serif {
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  .font-sans {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Authentic Richard Mille Website Styles */
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+.page-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.page-wrapper--no-padding {
+  padding: 0;
+}
+
+.no-scroll__content {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.page-wrapper__content {
+  height: auto;
+  overflow: visible;
+}
+
+.home {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.home__container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.home__section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+.home__section__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.home__section__media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.home__section__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.home__text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  text-align: center;
+  color: white;
+  /* max-width: 800px; */
+  width: 100%;
+  padding: 0 80px;
+}
+
+@media (max-width: 768px) {
+  .home__text {
+    padding: 0 20px;
+  }
+}
+
+.home__subtitle {
+  font-size: 1.125rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.home__title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.home__desc {
+  font-size: 1.25rem;
+  font-weight: 300;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.home__arrow__wrapper {
+  position: absolute;
+  bottom: 2rem;
+  left: 35%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+
+.home-arrow {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.home-arrow:hover {
+  transform: scale(1.1);
+}
+
+.home-arrow__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.home-arrow__arrow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Typography Classes */
+.title {
+  font-family: 'Interstate', sans-serif;
+  font-weight: 700;
+}
+
+.title--h1 {
+  font-size: 4rem;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-family: 'Interstate', sans-serif;
+  font-weight: 300;
+}
+
+.subtitle--2 {
+  font-size: 1.125rem;
+  line-height: 1.4;
+}
+
+.text {
+  font-family: 'Interstate', sans-serif;
+}
+
+.text--body1 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Loading States */
+.loading {
+  opacity: 0.7;
+}
+
+.next {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Enhanced loading animation for processing button */
+.home-arrow.loading .home-arrow__background circle.progress {
+  animation: loadingProgress 8s linear infinite;
+}
+
+@keyframes loadingProgress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+
+  100% {
+    stroke-dasharray: 100 100;
+  }
+}
+
+/* Processing button states */
+.home-arrow__wrapper.loading .home-arrow {
+  opacity: 0.7;
+}
+
+.home-arrow__wrapper.next .home-arrow {
+  opacity: 1;
+  animation: readyPulse 2s infinite;
+}
+
+/* Enhanced processing state */
+.home-arrow.processing {
+  animation: processingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes processingPulse {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Video processing indicator */
+.home-arrow__wrapper.loading::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  background: #ff0000;
+  border-radius: 50%;
+  animation: processingDot 1s ease-in-out infinite;
+}
+
+@keyframes processingDot {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes readyPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home__title {
+    font-size: 2.5rem;
+  }
+
+  .home__desc {
+    font-size: 1rem;
+  }
+
+  .home__subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home__title {
+    font-size: 2rem;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.home__container::-webkit-scrollbar {
+  display: none;
+}
+
+.home__container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.home-page-scrollbar-hidden::-webkit-scrollbar {
+  display: none !important; /* WebKit browsers (Chrome, Safari, Edge) */
+}
+
+.home-page-scrollbar-hidden * {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* Internet Explorer 10+ */
+}
+
+.home-page-scrollbar-hidden *::-webkit-scrollbar {
+  display: none !important; /* WebKit browsers (Chrome, Safari, Edge) */
+}
+
+/* Ensure all videos are visible */
+.home__section video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Footer styling - separate from scroll-snap */
+.page-wrapper > .footer {
+  background-color: #000000;
+  color: #ffffff;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+html:not(:lang(ja)) .layout * {
+  word-break: keep-all;
+}
+
+.home__arrow__wrapper[data-v-6b59c062] {
+  position: absolute;
+  bottom: 50px;
+  z-index: 10;
+  left: 110px;
+  transform: translate(-50%);
+  margin-left: 2px;
+  margin-top: 2px;
+}
+
+@media screen and (max-width: 768px) {
+  .home__arrow__wrapper[data-v-6b59c062] {
+    left: 50px;
+  }
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  padding: 0 56px;
+}
+
+.home-arrow[data-v-bf281ce8] {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  cursor: pointer;
+}
+
+.home-arrow__background[data-v-bf281ce8] {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.home-arrow__arrow[data-v-bf281ce8] {
+  position: absolute;
+  left: 1px;
+  top: 0;
+  transition: transform 0.3s ease;
+}
+
+.home-arrow__background .background[data-v-bf281ce8] {
+  opacity: 0.1;
+  fill: #737373;
+}
+
+.home-arrow__background .progress[data-v-bf281ce8] {
+  stroke-dasharray: 326.726, 326.726;
+  stroke-dashoffset: 330;
+  transform-origin: 50% 50%;
+  stroke-width: 2;
+  transform: rotate(-90deg);
+  fill: none;
+  stroke: rgb(255, 255, 255);
+}
+
+.home-arrow__arrow polyline {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
