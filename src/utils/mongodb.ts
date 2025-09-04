@@ -29,7 +29,9 @@ export async function getMongoClient(): Promise<MongoClient> {
   if (typeof (dns as any).setDefaultResultOrder === 'function') {
     try {
       (dns as any).setDefaultResultOrder('ipv4first');
-    } catch {}
+    } catch {
+      console.error('Failed to set DNS result order to IPv4 first');
+    }
   }
   console.log('Connecting to MongoDB...');
   
