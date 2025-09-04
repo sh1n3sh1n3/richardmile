@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 
 // Cache connection across hot reloads/serverless invocations
-let cached = (global as any).mongoose as
-  | { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null }
-  | undefined;
+type MongooseCache = { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
+let cached = (global as any).mongoose as MongooseCache | undefined;
 
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  const initial: MongooseCache = { conn: null, promise: null };
+  (global as any).mongoose = initial;
+  cached = initial;
 }
 
 async function connectMongoose(): Promise<typeof mongoose> {
@@ -27,10 +28,12 @@ async function connectMongoose(): Promise<typeof mongoose> {
       bufferCommands: false,
     } as any;
 
-    cached!.promise = (mongoose as any).connect(uri, opts).then((m: any) => m);
+    const promise = (mongoose as any).connect(uri, opts).then((m: any) => m);
+    cached!.promise = promise;
   }
 
-  cached!.conn = await cached!.promise;
+  const conn = await cached!.promise;
+  cached!.conn = conn;
   return cached!.conn;
 }
 
@@ -44,7 +47,9 @@ export async function closeMongoDBConnection() {
   // Do not close on Vercel to reuse connection; close only in local dev or explicit tests
   if (!process.env.VERCEL && mongoose.connection.readyState === 1) {
     await mongoose.connection.close();
-    cached = (global as any).mongoose = { conn: null, promise: null };
+    const reset: MongooseCache = { conn: null, promise: null };
+    (global as any).mongoose = reset;
+    cached = reset;
   }
 }
 
