@@ -2,6 +2,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getDatabase, closeMongoDBConnection } from '../../../utils/mongodb';
 
+export const config = {
+  runtime: 'nodejs',
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });

@@ -3,6 +3,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ObjectId } from 'mongodb';
 import { getDatabase, closeMongoDBConnection } from '../../../../utils/mongodb';
 
+export const config = {
+  runtime: 'nodejs',
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const db = await getDatabase();

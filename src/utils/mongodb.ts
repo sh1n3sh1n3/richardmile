@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import * as dns from 'dns';
 
 // Global variable to hold the MongoDB client instance
 let mongoClient: MongoClient | null = null;
@@ -24,7 +25,13 @@ export async function getMongoClient(): Promise<MongoClient> {
   // Create new connection
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
   
-  console.log('Connecting to MongoDB with URI:', uri);
+  // Force IPv4 first resolution to avoid SRV/IPv6 issues on some platforms (e.g., serverless)
+  if (typeof (dns as any).setDefaultResultOrder === 'function') {
+    try {
+      (dns as any).setDefaultResultOrder('ipv4first');
+    } catch {}
+  }
+  console.log('Connecting to MongoDB...');
   
   // Different options for local vs cloud MongoDB
   let options: any = {
