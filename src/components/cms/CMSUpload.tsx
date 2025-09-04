@@ -122,19 +122,64 @@ export default function CMSUpload({
     setProgress(0);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/cms/upload', {
+      // 1) Ask server for a presigned URL
+      const initRes = await fetch('/api/cms/upload-url', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type || 'application/octet-stream',
+          size: file.size,
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error('Upload failed');
+      if (!initRes.ok) {
+        throw new Error('Failed to initialize upload');
       }
 
-      const result = await response.json();
+      const { uploadUrl, getUrl, objectKey } = await initRes.json();
+
+      // 2) Upload directly to MinIO using the presigned URL
+      const uploadReq = new XMLHttpRequest();
+      await new Promise<void>((resolve, reject) => {
+        uploadReq.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            setProgress((event.loaded / event.total) * 100);
+          }
+        };
+        uploadReq.onerror = () => reject(new Error('Direct upload failed'));
+        uploadReq.onload = () => {
+          if (uploadReq.status >= 200 && uploadReq.status < 300) {
+            resolve();
+          } else {
+            reject(new Error('Direct upload failed'));
+          }
+        };
+        uploadReq.open('PUT', uploadUrl, true);
+        if (file.type) {
+          uploadReq.setRequestHeader('Content-Type', file.type);
+        }
+        uploadReq.send(file);
+      });
+
+      // 3) Finalize: save metadata in DB
+      const finalizeRes = await fetch('/api/cms/upload-finalize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          objectKey,
+          originalName: file.name,
+          mimeType: file.type,
+          size: file.size,
+          url: getUrl,
+        }),
+      });
+
+      if (!finalizeRes.ok) {
+        throw new Error('Failed to save metadata');
+      }
+
+      const result = await finalizeRes.json();
       onUploadSuccess(result);
       setUploadedFile(result);
       setProgress(100);
