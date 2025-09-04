@@ -1,55 +1,98 @@
-import mongoose from 'mongoose';
+import { MongoClient } from 'mongodb';
 
-// Cache connection across hot reloads/serverless invocations
-type MongooseCache = { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
-let cached = (global as any).mongoose as MongooseCache | undefined;
+// Global variable to hold the MongoDB client instance
+let mongoClient: MongoClient | null = null;
 
-if (!cached) {
-  const initial: MongooseCache = { conn: null, promise: null };
-  (global as any).mongoose = initial;
-  cached = initial;
-}
-
-async function connectMongoose(): Promise<typeof mongoose> {
-  if (cached!.conn) {
-    return cached!.conn;
+// Get or create MongoDB client
+export async function getMongoClient(): Promise<MongoClient> {
+  if (mongoClient) {
+    try {
+      // Test if connection is still alive
+      await mongoClient.db('admin').command({ ping: 1 });
+      return mongoClient;
+    } catch (error) {
+      // Connection is dead, close it
+      try {
+        await mongoClient.close();
+      } catch (closeError) {
+        console.error('Error closing dead MongoDB connection:', closeError);
+      }
+      mongoClient = null;
+    }
   }
 
-  if (!cached!.promise) {
-    const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-    const dbName = process.env.MONGODB_DB || 'cms';
+  // Create new connection
+  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+  
+  console.log('Connecting to MongoDB with URI:', uri);
+  
+  // Different options for local vs cloud MongoDB
+  let options: any = {
+    maxPoolSize: 5,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 10000,
+  };
 
-    const opts: any = {
-      dbName,
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
-      maxPoolSize: 10,
-      family: 4, // prefer IPv4 to avoid SRV/IPv6 issues
-      bufferCommands: false,
-    } as any;
-
-    const promise = (mongoose as any).connect(uri, opts).then((m: any) => m);
-    cached!.promise = promise;
+  if (uri.includes('mongodb+srv')) {
+    // MongoDB Atlas (cloud) - SSL is required
+    console.log('Using MongoDB Atlas configuration');
+    options = {
+      ...options,
+      retryWrites: true,
+      w: 'majority',
+    };
+  } else {
+    // Local MongoDB - no SSL needed
+    console.log('Using local MongoDB configuration');
+    options = {
+      ...options,
+      ssl: false,
+      directConnection: true,
+    };
   }
 
-  const conn = await cached!.promise;
-  cached!.conn = conn;
-  return cached!.conn;
+  console.log('MongoDB connection options:', options);
+
+  mongoClient = new MongoClient(uri, options);
+  
+  try {
+    await mongoClient.connect();
+    console.log('MongoDB connected successfully to:', uri);
+    return mongoClient;
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    mongoClient = null;
+    throw error;
+  }
 }
 
-// Expose DB like before for minimal API changes
+// Get database instance
 export async function getDatabase() {
-  const m = await connectMongoose();
-  return m.connection.db;
+  const client = await getMongoClient();
+  return client.db('cms');
 }
 
+// Close MongoDB connection
 export async function closeMongoDBConnection() {
-  // Do not close on Vercel to reuse connection; close only in local dev or explicit tests
-  if (!process.env.VERCEL && mongoose.connection.readyState === 1) {
-    await mongoose.connection.close();
-    const reset: MongooseCache = { conn: null, promise: null };
-    (global as any).mongoose = reset;
-    cached = reset;
+  if (mongoClient) {
+    try {
+      await mongoClient.close();
+      mongoClient = null;
+      console.log('MongoDB connection closed');
+    } catch (error) {
+      console.error('Failed to close MongoDB connection:', error);
+    }
   }
 }
 
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await closeMongoDBConnection();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  await closeMongoDBConnection();
+  process.exit(0);
+});
