@@ -35,14 +35,13 @@ export async function getMongoClient(): Promise<MongoClient> {
   };
 
   if (uri.includes('mongodb+srv')) {
-    // MongoDB Atlas (cloud) - SSL is required
+    // MongoDB Atlas (cloud)
     console.log('Using MongoDB Atlas configuration');
     options = {
       ...options,
-      // ssl: true,
-      // sslValidate: false,
-      // retryWrites: true,
-      // w: 'majority',
+      // SRV URIs handle TLS automatically; do not pass deprecated/unsupported flags
+      retryWrites: true,
+      w: 'majority',
     };
   } else {
     // Local MongoDB - no SSL needed
