@@ -63,6 +63,7 @@
     "mapbox-gl": "^2.12.1",
     "minio": "^8.0.5",
     "mongodb": "^6.19.0",
+    "mongoose": "^8.7.0",
     "multer": "^2.0.2",
     "next": "^15.5.0",
     "notistack": "^2.0.8",

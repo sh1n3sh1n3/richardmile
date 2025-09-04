@@ -1,100 +1,50 @@
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 
-// Global variable to hold the MongoDB client instance
-let mongoClient: MongoClient | null = null;
+// Cache connection across hot reloads/serverless invocations
+let cached = (global as any).mongoose as
+  | { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null }
+  | undefined;
 
-// Get or create MongoDB client
-export async function getMongoClient(): Promise<MongoClient> {
-  if (mongoClient) {
-    try {
-      // Test if connection is still alive
-      await mongoClient.db('admin').command({ ping: 1 });
-      return mongoClient;
-    } catch (error) {
-      // Connection is dead, close it
-      try {
-        await mongoClient.close();
-      } catch (closeError) {
-        console.error('Error closing dead MongoDB connection:', closeError);
-      }
-      mongoClient = null;
-    }
-  }
-
-  // Create new connection
-  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-  
-  console.log('Connecting to MongoDB with URI:', uri);
-  
-  // Different options for local vs cloud MongoDB
-  let options: any = {
-    maxPoolSize: 5,
-    serverSelectionTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    connectTimeoutMS: 10000,
-  };
-
-  if (uri.includes('mongodb+srv')) {
-    // MongoDB Atlas (cloud) - SSL is required
-    console.log('Using MongoDB Atlas configuration');
-    options = {
-      ...options,
-      ssl: true,
-      sslValidate: false,
-      retryWrites: true,
-      w: 'majority',
-    };
-  } else {
-    // Local MongoDB - no SSL needed
-    console.log('Using local MongoDB configuration');
-    options = {
-      ...options,
-      ssl: false,
-      directConnection: true,
-    };
-  }
-
-  console.log('MongoDB connection options:', options);
-
-  mongoClient = new MongoClient(uri, options);
-  
-  try {
-    await mongoClient.connect();
-    console.log('MongoDB connected successfully to:', uri);
-    return mongoClient;
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    mongoClient = null;
-    throw error;
-  }
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
 }
 
-// Get database instance
+async function connectMongoose(): Promise<typeof mongoose> {
+  if (cached!.conn) {
+    return cached!.conn;
+  }
+
+  if (!cached!.promise) {
+    const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+    const dbName = process.env.MONGODB_DB || 'cms';
+
+    const opts: any = {
+      dbName,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10,
+      family: 4, // prefer IPv4 to avoid SRV/IPv6 issues
+      bufferCommands: false,
+    } as any;
+
+    cached!.promise = (mongoose as any).connect(uri, opts).then((m: any) => m);
+  }
+
+  cached!.conn = await cached!.promise;
+  return cached!.conn;
+}
+
+// Expose DB like before for minimal API changes
 export async function getDatabase() {
-  const client = await getMongoClient();
-  return client.db('cms');
+  const m = await connectMongoose();
+  return m.connection.db;
 }
 
-// Close MongoDB connection
 export async function closeMongoDBConnection() {
-  if (mongoClient) {
-    try {
-      await mongoClient.close();
-      mongoClient = null;
-      console.log('MongoDB connection closed');
-    } catch (error) {
-      console.error('Failed to close MongoDB connection:', error);
-    }
+  // Do not close on Vercel to reuse connection; close only in local dev or explicit tests
+  if (!process.env.VERCEL && mongoose.connection.readyState === 1) {
+    await mongoose.connection.close();
+    cached = (global as any).mongoose = { conn: null, promise: null };
   }
 }
 
-// Graceful shutdown
-process.on('SIGINT', async () => {
-  await closeMongoDBConnection();
-  process.exit(0);
-});
-
-process.on('SIGTERM', async () => {
-  await closeMongoDBConnection();
-  process.exit(0);
-});
