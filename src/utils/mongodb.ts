@@ -39,11 +39,8 @@ export async function getMongoClient(): Promise<MongoClient> {
     console.log('Using MongoDB Atlas configuration');
     options = {
       ...options,
-      ssl: true,
-      sslValidate: false,
-      retryWrites: true,
-      w: 'majority',
-      tlsInsecure: false,
+      tls: true,
+      tlsAllowInvalidCertificates: true,
     };
   } else {
     // Local MongoDB - no SSL needed
