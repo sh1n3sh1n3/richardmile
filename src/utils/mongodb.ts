@@ -1,5 +1,4 @@
 import { MongoClient } from 'mongodb';
-import * as dns from 'dns';
 
 // Global variable to hold the MongoDB client instance
 let mongoClient: MongoClient | null = null;
@@ -25,15 +24,7 @@ export async function getMongoClient(): Promise<MongoClient> {
   // Create new connection
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
   
-  // Force IPv4 first resolution to avoid SRV/IPv6 issues on some platforms (e.g., serverless)
-  if (typeof (dns as any).setDefaultResultOrder === 'function') {
-    try {
-      (dns as any).setDefaultResultOrder('ipv4first');
-    } catch {
-      console.error('Failed to set DNS result order to IPv4 first');
-    }
-  }
-  console.log('Connecting to MongoDB...');
+  console.log('Connecting to MongoDB with URI:', uri);
   
   // Different options for local vs cloud MongoDB
   let options: any = {
@@ -44,11 +35,12 @@ export async function getMongoClient(): Promise<MongoClient> {
   };
 
   if (uri.includes('mongodb+srv')) {
-    // MongoDB Atlas (cloud)
+    // MongoDB Atlas (cloud) - SSL is required
     console.log('Using MongoDB Atlas configuration');
     options = {
       ...options,
-      // SRV URIs handle TLS automatically; do not pass deprecated/unsupported flags
+      ssl: true,
+      sslValidate: false,
       retryWrites: true,
       w: 'majority',
     };
