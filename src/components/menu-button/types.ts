@@ -1,5 +1,5 @@
 import { IconButtonProps } from '@mui/material';
-import { IconifyProps } from '../iconify/types';
+// import { IconifyProps } from '../iconify/types';
 
 // ----------------------------------------------------------------------
 

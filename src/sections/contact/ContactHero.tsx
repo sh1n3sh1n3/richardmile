@@ -1,18 +1,18 @@
 // @mui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 // locales
-import { useLocales } from 'src/locales';
+// import { useLocales } from 'src/locales';
 // hooks
-import useResponsive from '../../hooks/useResponsive';
+// import useResponsive from '../../hooks/useResponsive';
 //
 import { StyledHero, StyledHeroImage } from '../styls';
 
 // ----------------------------------------------------------------------
 
 export default function BrandConceptHero() {
-  const theme = useTheme();
-  const { translate } = useLocales();
-  const isDesktop = useResponsive('up', 'md');
+  // const theme = useTheme();
+  // const { translate } = useLocales();
+  // const isDesktop = useResponsive('up', 'md');
 
   return (
     <StyledHero>

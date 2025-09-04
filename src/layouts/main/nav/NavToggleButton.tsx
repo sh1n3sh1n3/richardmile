@@ -9,7 +9,7 @@ import { bgBlur } from '../../../utils/cssStyles';
 import { NAV } from '../../../config-global';
 // components
 import Iconify from '../../../components/iconify';
-import { useSettingsContext } from '../../../components/settings';
+// import { useSettingsContext } from '../../../components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ export default function NavToggleButton({
 }: IconButtonProps & Props) {
   const theme = useTheme();
 
-  const { themeLayout, onToggleLayout } = useSettingsContext();
+  // const { themeLayout, onToggleLayout } = useSettingsContext();
 
   const isDesktop = useResponsive('up', 'lg');
 

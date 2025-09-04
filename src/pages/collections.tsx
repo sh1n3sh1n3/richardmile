@@ -2,10 +2,10 @@ import { m } from 'framer-motion';
 // next
 import Head from 'next/head';
 // @mui
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box, Grid, Card, Stack, Container, Typography } from '@mui/material';
 // locales
-import { useLocales } from 'src/locales';
+// import { useLocales } from 'src/locales';
 // hooks
 // assets
 import { collections } from 'src/assets/data';
@@ -117,9 +117,9 @@ CollectionsPage.getLayout = (page: React.ReactElement) => <MainLayout>{page}</Ma
 // ----------------------------------------------------------------------
 
 export default function CollectionsPage() {
-  const theme = useTheme();
+  // const theme = useTheme();
 
-  const { translate } = useLocales();
+  // const { translate } = useLocales();
 
   const isOffset = useOffSetTop(SCROLL_HEIGHT);
 

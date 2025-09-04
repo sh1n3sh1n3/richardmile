@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { Box, Grid, Stack, Divider, Container, Typography } from '@mui/material';
 // _mock
 import { NavItem } from 'src/components/nav-section';
-import { _socials } from '../../_mock/arrays';
+// import { _socials } from '../../_mock/arrays';
 // components
 import Logo from '../../components/logo';
 import LanguageBar from '../../components/language-bar';

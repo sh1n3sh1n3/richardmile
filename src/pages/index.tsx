@@ -1,3 +1,4 @@
+// import { useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 // @mui
@@ -16,6 +17,22 @@ HomePage.getLayout = (page: React.ReactElement) => <MainLayout> {page} </MainLay
 // ----------------------------------------------------------------------
 
 export default function HomePage() {
+  // const [sections, setSections] = useState([]);
+
+  // useEffect(() => {
+  //   const fetchSections = async () => {
+  //     try {
+  //       const response = await fetch('/api/sections/index');
+  //       const data = await response.json();
+  //       setSections(data);
+  //     } catch (error) {
+  //       console.error('Failed to fetch sections:', error);
+  //     }
+  //   };
+    
+  //   fetchSections();
+  // }, []);
+
   return (
     <>
       <Head>

@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { m, useScroll } from 'framer-motion';
 // @mui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Box, Container, Typography } from '@mui/material';
 // locales
 import { useLocales } from 'src/locales';
 // hooks
-import useResponsive from '../../hooks/useResponsive';
+// import useResponsive from '../../hooks/useResponsive';
 // components
 import { MotionContainer, varFade } from '../../components/animate';
 //
-import { StyledHero, StyledHeroVideo, StyledHeroContent, StyledVideoOverlay } from '../styls';
+import { StyledHeroContent } from '../styls';
 
 // ----------------------------------------------------------------------
 
 export default function BrandConceptHero() {
-  const theme = useTheme();
+  // const theme = useTheme();
   const { translate } = useLocales();
   const { scrollYProgress } = useScroll();
-  const isDesktop = useResponsive('up', 'md');
+  // const isDesktop = useResponsive('up', 'md');
 
-  const [hide, setHide] = useState(false);
+  // const [hide, setHide] = useState(false);
 
   useEffect(
     () =>
@@ -48,7 +48,7 @@ export default function BrandConceptHero() {
       </StyledHero> */}
 
       <Container maxWidth="xl" component={MotionContainer}>
-        <StyledHeroContent sx={{ ...(hide && { opacity: 0 }) }}>
+        <StyledHeroContent sx={{ ...({ opacity: 0 }) }}>
           <Box sx={{ position: 'absolute', bottom: 0, left: 0 }}>
             <m.div variants={varFade().inUp}>
               <Box sx={{ maxWidth: 520 }}>

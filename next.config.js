@@ -19,5 +19,13 @@ module.exports = {
     // AUTH0
     AUTH0_DOMAIN: '',
     AUTH0_CLIENT_ID: '',
+    // MONGODB
+     MONGODB_URI: 'mongodb://localhost:27017',
+    // MINIO
+    MINIO_ENDPOINT: 'localhost',
+    MINIO_PORT: '9000',
+    MINIO_USE_SSL: 'false',
+    MINIO_ACCESS_KEY: 'minioadmin',
+    MINIO_SECRET_KEY: 'minioadmin',
   },
 };

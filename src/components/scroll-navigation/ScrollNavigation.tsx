@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 // @mui
-import { styled, alpha, useTheme } from '@mui/material/styles';
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { styled, alpha } from '@mui/material/styles';
+import {  IconButton, Tooltip } from '@mui/material';
 // components
 import Iconify from '../iconify';
 
@@ -53,7 +53,7 @@ interface ScrollNavigationProps {
 }
 
 export default function ScrollNavigation({ sections }: ScrollNavigationProps) {
-  const theme = useTheme();
+  // const theme = useTheme();
   const [activeSection, setActiveSection] = useState(0);
 
   useEffect(() => {

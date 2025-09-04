@@ -1,32 +1,38 @@
-import { useEffect, useState } from 'react';
-import { m, useScroll } from 'framer-motion';
+// import { useEffect, useState } from 'react';
+import { m } from 'framer-motion';
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { Box, Container, Typography } from '@mui/material';
+// import { useTheme } from '@mui/material/styles';
+import { Box,  Typography } from '@mui/material';
 // locales
-import { useLocales } from 'src/locales';
+// import { useLocales } from 'src/locales';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // components
-import { MotionContainer, varFade } from '../../components/animate';
+import {  varFade } from '../../components/animate';
 //
-import { StyledHero, StyledHeroVideo, StyledHeroContent, StyledVideoOverlay } from '../styls';
+import { StyledHeroContent } from '../styls';
 
 interface HeroSectionProps {
   onVideoLoad?: () => void;
   onVideoPlay?: () => void;
   onVideoPause?: () => void;
   videoSrc: string;
+  label:string;
+  title:string;
+  description:string;
 }
 export default function HomeVideo({
   onVideoLoad,
   onVideoPlay,
   onVideoPause,
   videoSrc,
+  label,
+  title,
+  description
 }: HeroSectionProps) {
-  const theme = useTheme();
-  const { translate } = useLocales();
-  const { scrollYProgress } = useScroll();
+  // const theme = useTheme();
+  // const { translate } = useLocales();
+  // const { scrollYProgress } = useScroll();
   const isDesktop = useResponsive('up', 'md');
 
   return (
@@ -56,13 +62,14 @@ export default function HomeVideo({
             <m.div variants={varFade().inUp}>
               <Box sx={{ maxWidth: 800 }}>
                 <Typography variant="inherit" sx={{ mb: isDesktop ? 6 : 2 }}>
-                  New Model
+                  {label}
                 </Typography>
                 <Typography variant={isDesktop ? 'h1' : 'h3'}>
-                  {`${translate('RICHARD MILLE UNIVERSE')}`}
+                  {/* {`${translate('RICHARD MILLE UNIVERSE')}`} */}
+                  {title}
                 </Typography>
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                  The story behind
+                  {description}
                 </Typography>
               </Box>
             </m.div>

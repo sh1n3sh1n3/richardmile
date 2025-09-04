@@ -1,25 +1,25 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { m, useScroll } from 'framer-motion';
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { Box, Container, Typography } from '@mui/material';
+// import { useTheme } from '@mui/material/styles';
+// import { Box, Container, Typography } from '@mui/material';
 // locales
-import { useLocales } from 'src/locales';
+// import { useLocales } from 'src/locales';
 // hooks
-import useResponsive from '../../hooks/useResponsive';
+// import useResponsive from '../../hooks/useResponsive';
 // components
-import { MotionContainer, varFade } from '../../components/animate';
+// import { MotionContainer, varFade } from '../../components/animate';
 //
-import { StyledHero, StyledHeroVideo, StyledHeroContent, StyledVideoOverlay } from '../styls';
+// import { StyledHero, StyledHeroVideo, StyledHeroContent, StyledVideoOverlay } from '../styls';
 import HomeVideo from './HomeVideo';
 import ProcessingButton from './ProcessingButton';
 // ----------------------------------------------------------------------
 
 export default function HomeHero() {
-  const theme = useTheme();
-  const { translate } = useLocales();
+  // const theme = useTheme();
+  // const { translate } = useLocales();
   const { scrollYProgress } = useScroll();
-  const isDesktop = useResponsive('up', 'md');
+  // const isDesktop = useResponsive('up', 'md');
 
   const [videoLoadingStates, setVideoLoadingStates] = useState<boolean[]>([
     true,
@@ -68,30 +68,48 @@ export default function HomeHero() {
       {
         id: 1,
         hasVideo: true,
+        label:'New Model',
+        title:'RICHARD MILLE UNIVERSE',
+        description:'The story behind',
         src: 'https://video.richardmille.com/mobile/the-brand-history-rm-homepage.mp4',
       },
       {
         id: 2,
         hasVideo: true,
+        label:'New Model',
+        title:'SAPPHIRE',
+        description:'A Material Beyond Compare',
         src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
       },
       {
         id: 3,
+        label:'New Model',
+        title:'RICHARD MILLE UNIVERSE',
+        description:'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/header-collection-women-04_1.mp4',
       },
       {
         id: 4,
+        label:'New Model',
+        title:'RICHARD MILLE UNIVERSE',
+        description:'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/30-01-LMC_packshot_169_header-1.mp4',
       },
       {
         id: 5,
+        label:'New Model',
+        title:'RICHARD MILLE UNIVERSE',
+        description:'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
       },
       {
         id: 6,
+        label:'New Model',
+        title:'RICHARD MILLE UNIVERSE',
+        description:'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/RMB01_packshot_169_header-2.mp4',
       },
@@ -290,6 +308,9 @@ export default function HomeHero() {
                   onVideoPlay={() => handleVideoPlay(index)}
                   onVideoPause={() => handleVideoPause(index)}
                   videoSrc={item.src}
+                  label={item.label}
+                  title={item.title}
+                  description={item.description}
                 />
 
                 {/* Processing button for each video section */}

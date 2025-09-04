@@ -1,5 +1,5 @@
 // @mui
-import { IconButton, Stack, SxProps } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 // locales
 import { _socials } from 'src/_mock/arrays';
 import Iconify from 'src/components/iconify';

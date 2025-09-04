@@ -1,9 +1,9 @@
 import { forwardRef } from 'react';
 // @mui
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Button, ButtonProps } from '@mui/material';
 // components
-import Iconify from './iconify';
+// import Iconify from './iconify';
 
 // ----------------------------------------------------------------------
 
@@ -53,31 +53,27 @@ interface StyleButtonProps extends ButtonProps {
 }
 
 const StyleButton = forwardRef<HTMLButtonElement, StyleButtonProps>(
-  ({ children, startIcon, endIcon, ...other }, ref) => {
-    const theme = useTheme();
-
-    return (
-      <StyledButton ref={ref} {...other}>
-        <div className="button-content">
-          {startIcon && (
-            <div className="button-icon">
-              {startIcon}
-            </div>
-          )}
-          
-          <span className="button-text">
-            {children}
-          </span>
-          
-          {endIcon && (
-            <div className="button-icon">
-              {endIcon}
-            </div>
-          )}
-        </div>
-      </StyledButton>
-    );
-  }
+  ({ children, startIcon, endIcon, ...other }, ref) => (
+    <StyledButton ref={ref} {...other}>
+      <div className="button-content">
+        {startIcon && (
+          <div className="button-icon">
+            {startIcon}
+          </div>
+        )}
+        
+        <span className="button-text">
+          {children}
+        </span>
+        
+        {endIcon && (
+          <div className="button-icon">
+            {endIcon}
+          </div>
+        )}
+      </div>
+    </StyledButton>
+  )
 );
 
 StyleButton.displayName = 'StyleButton';

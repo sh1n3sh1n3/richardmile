@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // @mui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Box, MenuItem, Typography, Stack, Divider } from '@mui/material';
 // locales
 import { useLocales } from 'src/locales';
@@ -77,7 +77,7 @@ export default function Filter({
   selectedCategory = 'all',
   onCategoryChange,
 }: CollectionsFilterProps) {
-  const theme = useTheme();
+  // const theme = useTheme();
   const { translate } = useLocales();
 
   const [isFilter, setIsFilter] = useState(false);
