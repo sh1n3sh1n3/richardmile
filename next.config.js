@@ -20,7 +20,7 @@ module.exports = {
     AUTH0_DOMAIN: '',
     AUTH0_CLIENT_ID: '',
     // MONGODB
-    MONGODB_URI: 'mongodb+srv://admin:admin@cluster0.an4se.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+    MONGODB_URI: 'mongodb+srv://admin:admin@cluster0.an4se.mongodb.net/cms?retryWrites=true&w=majority&appName=Cluster0',
     // MINIO
     MINIO_ENDPOINT: 'play.min.io',
     MINIO_PORT: '443',

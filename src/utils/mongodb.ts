@@ -23,9 +23,9 @@ export async function getMongoClient(): Promise<MongoClient> {
 
   // Create new connection
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-
+  
   console.log('Connecting to MongoDB with URI:', uri);
-
+  
   // Different options for local vs cloud MongoDB
   let options: any = {
     maxPoolSize: 5,
@@ -39,8 +39,10 @@ export async function getMongoClient(): Promise<MongoClient> {
     console.log('Using MongoDB Atlas configuration');
     options = {
       ...options,
-      tls: true,
-      tlsAllowInvalidCertificates: true,
+      ssl: true,
+      sslValidate: false,
+      retryWrites: true,
+      w: 'majority',
     };
   } else {
     // Local MongoDB - no SSL needed
@@ -55,7 +57,7 @@ export async function getMongoClient(): Promise<MongoClient> {
   console.log('MongoDB connection options:', options);
 
   mongoClient = new MongoClient(uri, options);
-
+  
   try {
     await mongoClient.connect();
     console.log('MongoDB connected successfully to:', uri);
