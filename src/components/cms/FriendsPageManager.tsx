@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import {
   Box,
@@ -23,6 +22,18 @@ interface FriendSection {
   _id?: string;
   name: string;
   image: string;
+  description?: string;
+  profession?: string;
+  sport?: string;
+  achievements?: string[];
+  socialMedia?: {
+    instagram?: string;
+    twitter?: string;
+    facebook?: string;
+    website?: string;
+  };
+  isActive?: boolean;
+  order?: number;
 }
 
 export default function FriendsPageManager() {
@@ -39,11 +50,11 @@ export default function FriendsPageManager() {
 
   const fetchSections = async () => {
     try {
-      const response = await fetch('/api/cms/sections?page=friends');
+      const response = await fetch('/api/friends');
       const data = await response.json();
       setSections(data);
     } catch (error) {
-      console.error('Failed to fetch sections:', error);
+      console.error('Failed to fetch friends:', error);
     }
   };
 
@@ -52,11 +63,11 @@ export default function FriendsPageManager() {
     try {
       const method = sectionData._id ? 'PUT' : 'POST';
       const { _id, ...sectionDataWithoutId } = sectionData;
-      const requestBody = sectionData._id 
-        ? { id: _id, ...sectionDataWithoutId, page: 'friends' }
-        : { ...sectionDataWithoutId, page: 'friends' };
-      
-      const response = await fetch('/api/cms/sections', {
+      const requestBody = sectionData._id
+        ? { id: _id, ...sectionDataWithoutId }
+        : { ...sectionDataWithoutId };
+
+      const response = await fetch('/api/friends', {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
@@ -79,7 +90,7 @@ export default function FriendsPageManager() {
 
   const handleDelete = async (id: string) => {
     // Find the section to get its name for confirmation
-    const section = sections.find(s => s._id === id);
+    const section = sections.find((s) => s._id === id);
     if (section) {
       setDeleteConfirm({ id, name: section.name });
     }
@@ -87,9 +98,9 @@ export default function FriendsPageManager() {
 
   const confirmDelete = async () => {
     if (!deleteConfirm) return;
-    
+
     try {
-      const response = await fetch('/api/cms/sections', {
+      const response = await fetch('/api/friends', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: deleteConfirm.id }),
@@ -128,6 +139,13 @@ export default function FriendsPageManager() {
             setEditingSection({
               name: '',
               image: '',
+              description: '',
+              profession: '',
+              sport: '',
+              achievements: [],
+              socialMedia: {},
+              isActive: true,
+              order: sections.length,
             });
             setEditDialog(true);
           }}
@@ -136,31 +154,43 @@ export default function FriendsPageManager() {
         </Button>
       </Box>
 
-      
-
       <Grid container spacing={3}>
-        {sections.map((section) => (
+        {sections?.map((section) => (
           <Grid item xs={12} sm={6} md={3} key={section._id}>
-            <Card sx={{ 
-              border: '1px solid white',
-              transition: 'all 0.2s ease-in-out',
-              '&:hover': {
-                borderColor: 'rgba(255, 255, 255, 0.8)',
-                boxShadow: '0 4px 20px rgba(255, 255, 255, 0.1)',
-              }
-            }}>
+            <Card
+              sx={{
+                border: '1px solid white',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  borderColor: 'rgba(255, 255, 255, 0.8)',
+                  boxShadow: '0 4px 20px rgba(255, 255, 255, 0.1)',
+                },
+              }}
+            >
               <CardMedia
                 component="img"
                 height="200"
                 image={section.image}
                 alt={section.name}
-                loading='lazy'
+                loading="lazy"
               />
               <CardContent>
                 <Typography variant="h6" gutterBottom>
                   {section.name}
                 </Typography>
-                
+                {section.description && (
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {section.description.length > 100
+                      ? `${section.description.substring(0, 100)}...`
+                      : section.description}
+                  </Typography>
+                )}
+                {section.profession && (
+                  <Typography variant="caption" color="primary" display="block">
+                    {section.profession}
+                  </Typography>
+                )}
+
                 <Box display="flex" justifyContent="space-between" mt={2}>
                   <IconButton
                     onClick={() => {
@@ -170,10 +200,7 @@ export default function FriendsPageManager() {
                   >
                     <Edit />
                   </IconButton>
-                  <IconButton
-                    onClick={() => handleDelete(section._id!)}
-                    color="error"
-                  >
+                  <IconButton onClick={() => handleDelete(section._id!)} color="error">
                     <Delete />
                   </IconButton>
                 </Box>
@@ -183,10 +210,8 @@ export default function FriendsPageManager() {
         ))}
       </Grid>
 
-      <Dialog open={editDialog} onClose={() => setEditDialog(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {editingSection?._id ? 'Edit Friend' : 'Add Friend'}
-        </DialogTitle>
+      <Dialog open={editDialog} onClose={() => setEditDialog(false)} maxWidth="md" fullWidth>
+        <DialogTitle>{editingSection?._id ? 'Edit Friend' : 'Add Friend'}</DialogTitle>
         <DialogContent>
           {editingSection && (
             <Box sx={{ pt: 2 }}>
@@ -196,9 +221,43 @@ export default function FriendsPageManager() {
                     fullWidth
                     label="Name"
                     value={editingSection.name}
+                    onChange={(e) => setEditingSection({ ...editingSection, name: e.target.value })}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    value={editingSection.description || ''}
                     onChange={(e) =>
-                      setEditingSection({ ...editingSection, name: e.target.value })
+                      setEditingSection({ ...editingSection, description: e.target.value })
                     }
+                    multiline
+                    rows={3}
+                    placeholder="Brief description of the friend/partner"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Profession"
+                    value={editingSection.profession || ''}
+                    onChange={(e) =>
+                      setEditingSection({ ...editingSection, profession: e.target.value })
+                    }
+                    placeholder="e.g., Professional Golfer"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Sport"
+                    value={editingSection.sport || ''}
+                    onChange={(e) =>
+                      setEditingSection({ ...editingSection, sport: e.target.value })
+                    }
+                    placeholder="e.g., Golf"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -208,11 +267,15 @@ export default function FriendsPageManager() {
                   <CMSUpload
                     onUploadSuccess={handleUploadSuccess}
                     accept={{ 'image/*': [] }}
-                    existingMedia={editingSection.image ? {
-                      src: editingSection.image,
-                      isVideo: false,
-                      fileName: editingSection.name || 'Current Image'
-                    } : undefined}
+                    existingMedia={
+                      editingSection.image
+                        ? {
+                            src: editingSection.image,
+                            isVideo: false,
+                            fileName: editingSection.name || 'Current Image',
+                          }
+                        : undefined
+                    }
                   />
                 </Grid>
               </Grid>
@@ -220,7 +283,9 @@ export default function FriendsPageManager() {
           )}
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={() => setEditDialog(false)}>Cancel</Button>
+          <Button variant="contained" onClick={() => setEditDialog(false)}>
+            Cancel
+          </Button>
           <Button
             variant="contained"
             onClick={() => editingSection && handleSave(editingSection)}
@@ -241,7 +306,8 @@ export default function FriendsPageManager() {
           <DialogTitle id="delete-dialog-title">Confirm Delete</DialogTitle>
           <DialogContent>
             <Typography id="delete-dialog-description">
-              Are you sure you want to delete &quot;{deleteConfirm?.name}&quot;? This action cannot be undone.
+              Are you sure you want to delete &quot;{deleteConfirm?.name}&quot;? This action cannot
+              be undone.
             </Typography>
           </DialogContent>
           <DialogActions>

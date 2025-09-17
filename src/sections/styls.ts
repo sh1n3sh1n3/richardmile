@@ -33,12 +33,20 @@ export const StyledHero = styled('div')(({ theme }) => ({
   position: 'fixed',
 }));
 
-export const StyledHeroVideo = styled('video')({
+export const StyledHeroVideo = styled('video')(({ theme }) => ({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
   objectPosition: 'center',
-});
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  zIndex: 1,
+  [theme.breakpoints.down('md')]: {
+    // Ensure video covers full height on mobile
+    minHeight: '100vh',
+  },
+}));
 
 export const StyledHeroImage = styled('div')<{ url: string }>(({ theme, url }) => ({
   position: 'relative',

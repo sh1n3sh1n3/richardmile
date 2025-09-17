@@ -1,4 +1,4 @@
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 // @mui
@@ -7,6 +7,8 @@ import { Box } from '@mui/material';
 import MainLayout from 'src/layouts/main';
 // components
 import ScrollProgress from '../components/scroll-progress';
+import { LoadingScreen, RichardMilleSpinner } from '../components/loading';
+import { useLoading } from '../contexts/LoadingContext';
 // sections
 import { HomeHero } from '../sections/home';
 
@@ -16,32 +18,71 @@ HomePage.getLayout = (page: React.ReactElement) => <MainLayout> {page} </MainLay
 
 // ----------------------------------------------------------------------
 
-export default function HomePage() {
-  // const [sections, setSections] = useState([]);
+interface Section {
+  _id: string;
+  hasVideo: boolean;
+  label: string;
+  title: string;
+  description: string;
+  src: string;
+}
 
-  // useEffect(() => {
-  //   const fetchSections = async () => {
-  //     try {
-  //       const response = await fetch('/api/sections/index');
-  //       const data = await response.json();
-  //       setSections(data);
-  //     } catch (error) {
-  //       console.error('Failed to fetch sections:', error);
-  //     }
-  //   };
-    
-  //   fetchSections();
-  // }, []);
+export default function HomePage() {
+  const [sections, setSections] = useState<Section[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { setLoading: setGlobalLoading, setLoadingMessage } = useLoading();
+
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        setLoading(true);
+        setGlobalLoading(true, 'Loading Richard Mille...', 'page');
+        setLoadingMessage('Fetching latest collections...');
+
+        const response = await fetch('/api/sections/index');
+        if (response.ok) {
+          const data = await response.json();
+          setSections(data);
+          setLoadingMessage('Experience loaded successfully');
+        } else {
+          console.error('Failed to fetch sections:', response.status);
+          setLoadingMessage('Using default content');
+        }
+      } catch (error) {
+        console.error('Failed to fetch sections:', error);
+        setLoadingMessage('Connection error - using offline content');
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+          setGlobalLoading(false);
+        }, 1000); // Show loading for at least 1 second for better UX
+      }
+    };
+
+    fetchSections();
+  }, [setGlobalLoading, setLoadingMessage]);
+
+  // Show loading screen while fetching data
+  if (loading) {
+    return (
+      <>
+        <Head>
+          <title>Loading... | Richard Mille</title>
+        </Head>
+        <LoadingScreen message="Loading Richard Mille..." showProgress={true} progress={100} />
+      </>
+    );
+  }
 
   return (
     <>
       <Head>
-        <title> The starting point for your next project | Rechard Mille</title>
+        <title> The starting point for your next project | Richard Mille</title>
       </Head>
 
       <ScrollProgress />
 
-      <HomeHero />
+      <HomeHero sections={sections} loading={loading} />
 
       <Box
         sx={{
@@ -49,7 +90,7 @@ export default function HomePage() {
           position: 'relative',
           bgcolor: 'background.default',
         }}
-       />
+      />
     </>
   );
 }

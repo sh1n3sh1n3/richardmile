@@ -7,6 +7,8 @@ import MainLayout from 'src/layouts/main';
 // components
 import { FriendsHero, FriendsContent } from 'src/sections/friends';
 import ScrollProgress from '../components/scroll-progress';
+import { LoadingScreen } from '../components/loading';
+import { FriendsPageProvider, useFriendsPageContext } from 'src/contexts/FriendsPageContext';
 // sections
 
 // ----------------------------------------------------------------------
@@ -15,11 +17,26 @@ FriendsPage.getLayout = (page: React.ReactElement) => <MainLayout> {page} </Main
 
 // ----------------------------------------------------------------------
 
-export default function FriendsPage() {
+// Component that handles loading state
+function FriendsPageContent() {
+  const { loading } = useFriendsPageContext();
+
+  // Show loading screen while fetching data
+  if (loading) {
+    return (
+      <>
+        <Head>
+          <title>Loading... | Richard Mille</title>
+        </Head>
+        <LoadingScreen message="Loading Friends..." showProgress={true} progress={75} />
+      </>
+    );
+  }
+
   return (
     <>
       <Head>
-        <title> The starting point for your next project | Rechard Mille</title>
+        <title> The starting point for your next project | Richard Mille</title>
       </Head>
 
       <ScrollProgress />
@@ -36,5 +53,13 @@ export default function FriendsPage() {
         <FriendsContent />
       </Box>
     </>
+  );
+}
+
+export default function FriendsPage() {
+  return (
+    <FriendsPageProvider>
+      <FriendsPageContent />
+    </FriendsPageProvider>
   );
 }

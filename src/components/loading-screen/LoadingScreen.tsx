@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 //
 import Logo from '../logo';
 
@@ -16,14 +16,41 @@ const StyledRoot = styled('div')(({ theme }) => ({
   height: '100%',
   position: 'fixed',
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   backgroundColor: theme.palette.background.default,
 }));
 
+const StyledLogoContainer = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: theme.spacing(4),
+}));
+
+const StyledText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  fontWeight: 300,
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+  fontSize: '0.875rem',
+}));
+
 // ----------------------------------------------------------------------
 
-export default function LoadingScreen() {
+interface LoadingScreenProps {
+  message?: string;
+  showProgress?: boolean;
+  progress?: number;
+}
+
+export default function LoadingScreen({
+  message = 'Loading...',
+  showProgress = false,
+  progress = 0,
+}: LoadingScreenProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
@@ -34,58 +61,97 @@ export default function LoadingScreen() {
 
   return (
     <StyledRoot>
+      <StyledLogoContainer>
+        {/* Outer rotating ring */}
+        <Box
+          component={m.div}
+          animate={{
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 4,
+            ease: 'linear',
+            repeat: Infinity,
+          }}
+          sx={{
+            width: 120,
+            height: 120,
+            position: 'absolute',
+            border: (theme) => `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+            borderRadius: '50%',
+          }}
+        />
+
+        {/* Middle pulsing ring */}
+        <Box
+          component={m.div}
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.7, 0.3],
+          }}
+          transition={{
+            duration: 2,
+            ease: 'easeInOut',
+            repeat: Infinity,
+          }}
+          sx={{
+            width: 80,
+            height: 80,
+            position: 'absolute',
+            border: (theme) => `2px solid ${alpha(theme.palette.primary.main, 0.4)}`,
+            borderRadius: '50%',
+          }}
+        />
+
+        {/* Logo with subtle animation */}
+        <m.div
+          animate={{
+            scale: [1, 1.05, 1],
+            opacity: [0.8, 1, 0.8],
+          }}
+          transition={{
+            duration: 3,
+            ease: 'easeInOut',
+            repeat: Infinity,
+          }}
+        >
+          <Logo disabledLink sx={{ width: 48, height: 48 }} />
+        </m.div>
+      </StyledLogoContainer>
+
+      {/* Loading message */}
       <m.div
-        animate={{
-          scale: [1, 0.9, 0.9, 1, 1],
-          opacity: [1, 0.48, 0.48, 1, 1],
-        }}
-        transition={{
-          duration: 2,
-          ease: 'easeInOut',
-          repeatDelay: 1,
-          repeat: Infinity,
-        }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
       >
-        <Logo disabledLink sx={{ width: 64, height: 64 }} />
+        <StyledText variant="body2">{message}</StyledText>
       </m.div>
 
-      <Box
-        component={m.div}
-        animate={{
-          scale: [1.6, 1, 1, 1.6, 1.6],
-          rotate: [270, 0, 0, 270, 270],
-          opacity: [0.25, 1, 1, 1, 0.25],
-          borderRadius: ['25%', '25%', '50%', '50%', '25%'],
-        }}
-        transition={{ ease: 'linear', duration: 3.2, repeat: Infinity }}
-        sx={{
-          width: 100,
-          height: 100,
-          position: 'absolute',
-          border: (theme) => `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`,
-        }}
-      />
-
-      <Box
-        component={m.div}
-        animate={{
-          scale: [1, 1.2, 1.2, 1, 1],
-          rotate: [0, 270, 270, 0, 0],
-          opacity: [1, 0.25, 0.25, 0.25, 1],
-          borderRadius: ['25%', '25%', '50%', '50%', '25%'],
-        }}
-        transition={{
-          ease: 'linear',
-          duration: 3.2,
-          repeat: Infinity,
-        }}
-        sx={{
-          width: 120,
-          height: 120,
-          position: 'absolute',
-          border: (theme) => `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`,
-        }}
-      />
+      {/* Progress bar */}
+      {showProgress && (
+        <Box
+          sx={{
+            width: 200,
+            height: 2,
+            backgroundColor: alpha('#000', 0.1),
+            borderRadius: 1,
+            marginTop: 3,
+            overflow: 'hidden',
+          }}
+        >
+          <m.div
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3 }}
+            style={{
+              height: '100%',
+              backgroundColor: 'currentColor',
+              color: 'primary.main',
+            }}
+          />
+        </Box>
+      )}
     </StyledRoot>
   );
 }

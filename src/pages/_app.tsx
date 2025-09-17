@@ -1,7 +1,7 @@
 // i18n
 import '../locales/i18n';
-import './globals.css'
-import './layout.css'
+import './globals.css';
+import './layout.css';
 
 // scroll bar
 import 'simplebar-react/dist/simplebar.min.css';
@@ -50,6 +50,8 @@ import ProgressBar from '../components/progress-bar';
 import SnackbarProvider from '../components/snackbar';
 import { MotionLazyContainer } from '../components/animate';
 import { SettingsProvider } from '../components/settings';
+import { LoadingProvider } from '../contexts/LoadingContext';
+import { PageTransition } from '../components/loading';
 
 // ----------------------------------------------------------------------
 
@@ -78,17 +80,19 @@ export default function MyApp(props: MyAppProps) {
       <ReduxProvider store={store}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <SettingsProvider>
-            <MotionLazyContainer>
-              <ThemeProvider>
-                <ThemeLocalization>
-                  <SnackbarProvider>
-                    <StyledChart />
-                    <ProgressBar />
-                    {getLayout(<Component {...pageProps} />)}
-                  </SnackbarProvider>
-                </ThemeLocalization>
-              </ThemeProvider>
-            </MotionLazyContainer>
+            <LoadingProvider>
+              <MotionLazyContainer>
+                <ThemeProvider>
+                  <ThemeLocalization>
+                    <SnackbarProvider>
+                      <StyledChart />
+                      <ProgressBar />
+                      <PageTransition>{getLayout(<Component {...pageProps} />)}</PageTransition>
+                    </SnackbarProvider>
+                  </ThemeLocalization>
+                </ThemeProvider>
+              </MotionLazyContainer>
+            </LoadingProvider>
           </SettingsProvider>
         </LocalizationProvider>
       </ReduxProvider>

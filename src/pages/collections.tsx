@@ -1,14 +1,24 @@
 import { m } from 'framer-motion';
 // next
 import Head from 'next/head';
+import { useState, useEffect } from 'react';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Card, Stack, Container, Typography } from '@mui/material';
+import {
+  Box,
+  Grid,
+  Card,
+  Stack,
+  Container,
+  Typography,
+  CircularProgress,
+  Alert,
+} from '@mui/material';
 // locales
 // import { useLocales } from 'src/locales';
 // hooks
 // assets
-import { collections } from 'src/assets/data';
+import { collections } from 'src/assets/data/collections';
 // config
 import { HEADER, SCROLL_HEIGHT } from 'src/config-global';
 // layouts
@@ -18,6 +28,53 @@ import useOffSetTop from '../hooks/useOffSetTop';
 import Filter from '../components/collections-filter';
 import ScrollProgress from '../components/scroll-progress';
 import { MotionContainer, varFade } from '../components/animate';
+
+// ----------------------------------------------------------------------
+
+// Types
+interface Collection {
+  _id: string;
+  id: string;
+  name: string;
+  subtitle: string;
+  category: string;
+  price: string;
+  imageUp: string;
+  imageDown: string;
+  description: string;
+  limited: boolean;
+  new: boolean;
+  featured?: boolean;
+  published?: boolean;
+  order?: number;
+  slug?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  tags?: string[];
+  specifications?: {
+    movement: string;
+    powerReserve: string;
+    waterResistance: string;
+    caseMaterial: string;
+    strapMaterial: string;
+    buckle: string;
+  };
+  availability?: {
+    inStock: boolean;
+    limitedEdition: boolean;
+    quantity: number | null;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data: Collection[];
+  count: number;
+  message?: string;
+  error?: string;
+}
 
 // ----------------------------------------------------------------------
 
@@ -118,10 +175,96 @@ CollectionsPage.getLayout = (page: React.ReactElement) => <MainLayout>{page}</Ma
 
 export default function CollectionsPage() {
   // const theme = useTheme();
-
   // const { translate } = useLocales();
 
   const isOffset = useOffSetTop(SCROLL_HEIGHT);
+
+  // State for collections data
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [usingFallback, setUsingFallback] = useState(false);
+
+  // Fetch collections data
+  const fetchCollections = async (category: string = 'all') => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const params = new URLSearchParams();
+      if (category !== 'all') {
+        params.append('category', category);
+      }
+
+      const response = await fetch(`/api/collections?${params.toString()}`);
+      const result: ApiResponse = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Failed to fetch collections');
+      }
+
+      setCollections(result.data);
+      setUsingFallback(false);
+    } catch (err) {
+      console.error('Error fetching collections:', err);
+      console.log('Falling back to static collections data');
+      setUsingFallback(true);
+
+      // Fallback to static data
+      let filteredCollections = collections;
+      if (category !== 'all') {
+        filteredCollections = collections.filter((item) => item.category === category);
+      }
+
+      // Transform static data to match API response format
+      const transformedCollections = filteredCollections.map((item, index) => ({
+        ...item,
+        _id: item.id, // Use id as _id for consistency
+        order: index + 1,
+        featured: item.new || item.limited,
+        published: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        slug: item.id,
+        seoTitle: `${item.name} - ${item.subtitle}`,
+        seoDescription: item.description,
+        tags: [
+          item.category.toLowerCase(),
+          ...(item.limited ? ['limited'] : []),
+          ...(item.new ? ['new'] : []),
+        ],
+        specifications: {
+          movement: 'Automatic',
+          powerReserve: '50 hours',
+          waterResistance: '50m',
+          caseMaterial: 'Carbon TPT',
+          strapMaterial: 'Rubber',
+          buckle: 'Titanium',
+        },
+        availability: {
+          inStock: !item.limited,
+          limitedEdition: item.limited,
+          quantity: item.limited ? Math.floor(Math.random() * 10) + 1 : null,
+        },
+      }));
+
+      setCollections(transformedCollections);
+      setError(null); // Clear error since we have fallback data
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load collections on component mount
+  useEffect(() => {
+    fetchCollections(selectedCategory);
+  }, [selectedCategory]);
+
+  // Handle category filter change
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
 
   return (
     <>
@@ -140,29 +283,87 @@ export default function CollectionsPage() {
 
             <m.div variants={varFade().inUp}>
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Filter />
+                <Filter
+                  onCategoryChange={handleCategoryChange}
+                  selectedCategory={selectedCategory}
+                />
               </Box>
             </m.div>
           </StyledHero>
 
-          <Grid container spacing={4} sx={{ mt: { xs: 1, md: 2 } }}>
-            {collections.map((item, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-                <m.div variants={varFade().inUp}>
-                  <StyledCard>
-                    <StyledImage imageUp={item.imageUp} imageDown={item.imageDown} />
+          {/* Loading State */}
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
+              <CircularProgress size={60} />
+            </Box>
+          )}
 
-                    <Stack sx={{ textAlign: 'center' }}>
-                      <Typography variant="subtitle1">{item.name}</Typography>
-                      <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-                        {item.subtitle}
-                      </Typography>
-                    </Stack>
-                  </StyledCard>
-                </m.div>
-              </Grid>
-            ))}
-          </Grid>
+          {/* Error State */}
+          {error && (
+            <Box sx={{ mt: 4 }}>
+              <Alert severity="error" sx={{ maxWidth: 600, mx: 'auto' }}>
+                {error}
+              </Alert>
+            </Box>
+          )}
+
+          {/* Fallback Data Notice */}
+          {usingFallback && !error && (
+            <Box sx={{ mt: 4 }}>
+              <Alert severity="info" sx={{ maxWidth: 600, mx: 'auto' }}>
+                Using cached collections data. Some features may be limited.
+              </Alert>
+            </Box>
+          )}
+
+          {/* Collections Grid */}
+          {!loading && !error && (
+            <Grid container spacing={4} sx={{ mt: { xs: 1, md: 2 } }}>
+              {collections.length === 0 ? (
+                <Grid item xs={12}>
+                  <Box sx={{ textAlign: 'center', mt: 8 }}>
+                    <Typography variant="h6" sx={{ color: 'text.disabled' }}>
+                      No collections found for the selected category.
+                    </Typography>
+                  </Box>
+                </Grid>
+              ) : (
+                collections.map((item, index) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={item._id || item.id}>
+                    <m.div variants={varFade().inUp}>
+                      <StyledCard>
+                        <StyledImage imageUp={item.imageUp} imageDown={item.imageDown} />
+
+                        <Stack sx={{ textAlign: 'center' }}>
+                          <Typography variant="subtitle1">{item.name}</Typography>
+                          <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
+                            {item.subtitle}
+                          </Typography>
+                          {/* Show additional info if available */}
+                          {item.limited && (
+                            <Typography
+                              variant="caption"
+                              sx={{ color: 'warning.main', fontWeight: 600 }}
+                            >
+                              LIMITED EDITION
+                            </Typography>
+                          )}
+                          {item.new && (
+                            <Typography
+                              variant="caption"
+                              sx={{ color: 'success.main', fontWeight: 600 }}
+                            >
+                              NEW
+                            </Typography>
+                          )}
+                        </Stack>
+                      </StyledCard>
+                    </m.div>
+                  </Grid>
+                ))
+              )}
+            </Grid>
+          )}
 
           <m.div variants={varFade().inUp}>
             <Box

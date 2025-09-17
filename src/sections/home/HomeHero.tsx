@@ -15,7 +15,21 @@ import HomeVideo from './HomeVideo';
 import ProcessingButton from './ProcessingButton';
 // ----------------------------------------------------------------------
 
-export default function HomeHero() {
+interface Section {
+  _id: string;
+  hasVideo: boolean;
+  label: string;
+  title: string;
+  description: string;
+  src: string;
+}
+
+interface HomeHeroProps {
+  sections?: Section[];
+  loading?: boolean;
+}
+
+export default function HomeHero({ sections: propSections, loading = false }: HomeHeroProps) {
   // const theme = useTheme();
   // const { translate } = useLocales();
   const { scrollYProgress } = useScroll();
@@ -63,59 +77,63 @@ export default function HomeHero() {
     [scrollYProgress]
   );
 
-  const sections = useMemo(
+  // Default sections as fallback
+  const defaultSections = useMemo(
     () => [
       {
-        id: 1,
+        _id: '1',
         hasVideo: true,
-        label:'New Model',
-        title:'RICHARD MILLE UNIVERSE',
-        description:'The story behind',
+        label: 'New Model',
+        title: 'RICHARD MILLE UNIVERSE',
+        description: 'The story behind',
         src: 'https://video.richardmille.com/mobile/the-brand-history-rm-homepage.mp4',
       },
       {
-        id: 2,
+        _id: '2',
         hasVideo: true,
-        label:'New Model',
-        title:'SAPPHIRE',
-        description:'A Material Beyond Compare',
+        label: 'New Model',
+        title: 'SAPPHIRE',
+        description: 'A Material Beyond Compare',
         src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
       },
       {
-        id: 3,
-        label:'New Model',
-        title:'RICHARD MILLE UNIVERSE',
-        description:'The story behind',
+        _id: '3',
+        label: 'New Model',
+        title: 'RICHARD MILLE UNIVERSE',
+        description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/header-collection-women-04_1.mp4',
       },
       {
-        id: 4,
-        label:'New Model',
-        title:'RICHARD MILLE UNIVERSE',
-        description:'The story behind',
+        _id: '4',
+        label: 'New Model',
+        title: 'RICHARD MILLE UNIVERSE',
+        description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/30-01-LMC_packshot_169_header-1.mp4',
       },
       {
-        id: 5,
-        label:'New Model',
-        title:'RICHARD MILLE UNIVERSE',
-        description:'The story behind',
+        _id: '5',
+        label: 'New Model',
+        title: 'RICHARD MILLE UNIVERSE',
+        description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
       },
       {
-        id: 6,
-        label:'New Model',
-        title:'RICHARD MILLE UNIVERSE',
-        description:'The story behind',
+        _id: '6',
+        label: 'New Model',
+        title: 'RICHARD MILLE UNIVERSE',
+        description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/RMB01_packshot_169_header-2.mp4',
       },
     ],
     []
   );
+
+  // Use prop sections if available, otherwise use default sections
+  const sections = propSections && propSections.length > 0 ? propSections : defaultSections;
 
   const scrollToNextSection = useCallback(() => {
     if (currentSection < sections.length - 1 && !isScrolling) {
@@ -297,7 +315,7 @@ export default function HomeHero() {
           <div className="home__container" style={{ height: '100vh' }} ref={sectionsRef}>
             {sections.map((item, index) => (
               <m.section
-                key={item.id}
+                key={item._id}
                 className="home__section"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isLoaded ? 1 : 0 }}

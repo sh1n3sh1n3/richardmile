@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Head from 'next/head';
 import { Box, Tabs, Tab, Typography } from '@mui/material';
@@ -6,6 +5,8 @@ import CMSLayout from 'src/layouts/cms/CMSLayout';
 import IndexPageManager from 'src/components/cms/IndexPageManager';
 import FriendsPageManager from 'src/components/cms/FriendsPageManager';
 import CollectionsPageManager from 'src/components/cms/CollectionsPageManager';
+import FriendsHeroManager from 'src/components/cms/FriendsHeroManager';
+import { FriendsHeroProvider } from 'src/contexts/FriendsHeroContext';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,7 +40,7 @@ export default function CMSPage() {
   };
 
   return (
-    <>
+    <FriendsHeroProvider>
       <Head>
         <title>Richard Mille CMS</title>
       </Head>
@@ -48,16 +49,18 @@ export default function CMSPage() {
         Content Management System
       </Typography>
 
-      <Box sx={{ 
-        borderBottom: 1, 
-        borderColor: 'rgba(255, 255, 255, 0.12)', 
-        mb: 3,
-        '& .MuiTabs-root': {
-          minHeight: 64,
-        }
-      }}>
-        <Tabs 
-          value={tabValue} 
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: 'rgba(255, 255, 255, 0.12)',
+          mb: 3,
+          '& .MuiTabs-root': {
+            minHeight: 64,
+          },
+        }}
+      >
+        <Tabs
+          value={tabValue}
           onChange={handleTabChange}
           sx={{
             '& .MuiTabs-indicator': {
@@ -88,6 +91,7 @@ export default function CMSPage() {
         >
           <Tab label="Index Page" />
           <Tab label="Friends & Partners" />
+          <Tab label="Friends Hero" />
           <Tab label="Collections" />
         </Tabs>
       </Box>
@@ -101,8 +105,12 @@ export default function CMSPage() {
       </TabPanel>
 
       <TabPanel value={tabValue} index={2}>
+        <FriendsHeroManager />
+      </TabPanel>
+
+      <TabPanel value={tabValue} index={3}>
         <CollectionsPageManager />
       </TabPanel>
-    </>
+    </FriendsHeroProvider>
   );
 }
