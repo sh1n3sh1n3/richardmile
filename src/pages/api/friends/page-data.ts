@@ -8,6 +8,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const db = await getDatabase();
+    if (!db) {
+      return res.status(500).json({ message: 'Database connection failed' });
+    }
 
     // Fetch both friends and hero data in parallel
     const [friends, heroContent] = await Promise.all([

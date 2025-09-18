@@ -1,4 +1,3 @@
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as Minio from 'minio';
 import formidable from 'formidable';
@@ -36,17 +35,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('File received:', {
       originalName: file.originalFilename,
       size: file.size,
-      mimetype: file.mimetype
+      mimetype: file.mimetype,
     });
 
     console.log('Connecting to MongoDB...');
     const db = await getDatabase();
+    if (!db) {
+      return res.status(500).json({ message: 'Database connection failed' });
+    }
     console.log('MongoDB connected successfully');
-    
+
     // Ensure bucket exists
     const bucketName = 'media-files';
     console.log('Checking MinIO bucket:', bucketName);
-    
+
     try {
       const bucketExists = await minioClient.bucketExists(bucketName);
       if (!bucketExists) {
@@ -66,27 +68,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const fileExtension = originalName.split('.').pop() || '';
     const timestamp = Date.now();
     const fileName = `${timestamp}-${originalName}`;
-    
+
     console.log('Uploading file to MinIO:', fileName);
     console.log('Original name:', originalName);
     console.log('File extension:', fileExtension);
     console.log('MIME type:', file.mimetype);
-    
+
     const fileStream = fs.createReadStream(file.filepath);
-    
+
     // Set metadata for MinIO to ensure proper content type
     const metadata = {
       'Content-Type': file.mimetype || 'application/octet-stream',
       'Content-Disposition': `inline; filename="${originalName}"`,
       'Cache-Control': 'public, max-age=31536000',
     };
-    
+
     await minioClient.putObject(bucketName, fileName, fileStream, file.size, metadata);
     console.log('File uploaded to MinIO successfully with metadata:', metadata);
-    
+
     // Generate accessible URL - use MinIO's public URL format
     const fileUrl = `http://localhost:9000/${bucketName}/${fileName}`;
-    
+
     // Test if file is accessible
     let isPubliclyAccessible = false;
     try {
@@ -94,20 +96,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log('File accessibility test:', {
         status: testResponse.status,
         contentType: testResponse.headers.get('content-type'),
-        url: fileUrl
+        url: fileUrl,
       });
-      
+
       isPubliclyAccessible = testResponse.status === 200;
     } catch (testError) {
       console.warn('File accessibility test failed:', testError);
     }
-    
+
     // If public access fails, generate a presigned URL
     let finalUrl = fileUrl;
     if (!isPubliclyAccessible) {
       try {
         console.log('Public access failed, generating presigned URL...');
-        const presignedUrl = await minioClient.presignedGetObject(bucketName, fileName, 24 * 60 * 60); // 24 hours
+        const presignedUrl = await minioClient.presignedGetObject(
+          bucketName,
+          fileName,
+          24 * 60 * 60
+        ); // 24 hours
         finalUrl = presignedUrl;
         console.log('Generated presigned URL:', presignedUrl);
       } catch (presignError) {
@@ -144,9 +150,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   } catch (error) {
     console.error('Upload error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: 'Upload failed',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   } finally {
     await closeMongoDBConnection();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Skeleton, alpha, styled } from '@mui/material';
+import { Box, Skeleton, alpha, styled, SxProps, Theme } from '@mui/material';
 import { m } from 'framer-motion';
 
 // ----------------------------------------------------------------------
@@ -18,10 +18,11 @@ interface SkeletonLoaderProps {
   variant?: 'text' | 'rectangular' | 'circular';
   width?: number | string;
   height?: number | string;
-  animation?: 'pulse' | 'wave' | 'false';
+  animation?: 'pulse' | 'wave' | false;
   count?: number;
   spacing?: number;
   className?: string;
+  sx?: SxProps<Theme>;
 }
 
 export default function SkeletonLoader({
@@ -32,6 +33,7 @@ export default function SkeletonLoader({
   count = 1,
   spacing = 1,
   className,
+  sx,
 }: SkeletonLoaderProps) {
   const skeletons = Array.from({ length: count }, (_, index) => (
     <m.div
@@ -46,6 +48,7 @@ export default function SkeletonLoader({
         height={height}
         animation={animation}
         className={className}
+        sx={sx}
       />
     </m.div>
   ));

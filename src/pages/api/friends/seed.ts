@@ -111,6 +111,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const db = await getDatabase();
+    if (!db) {
+      return res.status(500).json({
+        success: false,
+        message: 'Database connection failed',
+      });
+    }
     const collection = db.collection('friends');
 
     // Clear existing friends

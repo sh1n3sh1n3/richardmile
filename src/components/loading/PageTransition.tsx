@@ -75,40 +75,41 @@ export default function PageTransition({ children }: PageTransitionProps) {
     <>
       <AnimatePresence>
         {isLoading && (
-          <StyledOverlay
-            component={m.div}
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <m.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Box
-                sx={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: '50%',
-                  border: '3px solid',
-                  borderColor: 'primary.main',
-                  borderTopColor: 'transparent',
-                  animation: 'spin 1s linear infinite',
-                  '@keyframes spin': {
-                    '0%': { transform: 'rotate(0deg)' },
-                    '100%': { transform: 'rotate(360deg)' },
-                  },
-                }}
-              />
-            </m.div>
+            <StyledOverlay>
+              <m.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Box
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: '50%',
+                    border: '3px solid',
+                    borderColor: 'primary.main',
+                    borderTopColor: 'transparent',
+                    animation: 'spin 1s linear infinite',
+                    '@keyframes spin': {
+                      '0%': { transform: 'rotate(0deg)' },
+                      '100%': { transform: 'rotate(360deg)' },
+                    },
+                  }}
+                />
+              </m.div>
 
-            <StyledProgressBar>
-              <StyledProgress sx={{ width: `${progress}%` }} />
-            </StyledProgressBar>
-          </StyledOverlay>
+              <StyledProgressBar>
+                <StyledProgress sx={{ width: `${progress}%` }} />
+              </StyledProgressBar>
+            </StyledOverlay>
+          </m.div>
         )}
       </AnimatePresence>
 

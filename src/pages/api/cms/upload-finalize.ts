@@ -14,6 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const db = await getDatabase();
+    if (!db) {
+      return res.status(500).json({ message: 'Database connection failed' });
+    }
     const collection = db.collection('media');
 
     const doc = {
@@ -51,5 +54,3 @@ export const config = {
     },
   },
 };
-
-

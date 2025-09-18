@@ -8,6 +8,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const db = await getDatabase();
+    if (!db) {
+      return res.status(500).json({ message: 'Failed to connect to database' });
+    }
     const collection = db.collection('friends_hero');
 
     // Check if hero content already exists
