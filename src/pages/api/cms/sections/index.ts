@@ -1,4 +1,3 @@
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ObjectId } from 'mongodb';
 import { getDatabase, closeMongoDBConnection } from '../../../../utils/mongodb';
@@ -16,8 +15,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       case 'POST': {
+        const { slug, page } = req.body;
+
+        // Validate slug for collections
+        if (page === 'collections') {
+          if (!slug || typeof slug !== 'string' || slug.trim() === '') {
+            return res.status(400).json({
+              success: false,
+              message: 'Slug is required for collections',
+            });
+          }
+
+          // Check if slug is unique
+          const existingSlug = await collection.findOne({
+            page: 'collections',
+            slug: slug.trim(),
+          });
+
+          if (existingSlug) {
+            return res.status(400).json({
+              success: false,
+              message: 'Slug must be unique. This slug already exists.',
+            });
+          }
+        }
+
         const newSection = await collection.insertOne({
           ...req.body,
+          slug: page === 'collections' ? slug.trim() : req.body.slug,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
@@ -25,11 +50,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       case 'PUT': {
-        const { id, _id, ...updateData } = req.body;
+        const { id, _id, slug, page, ...updateData } = req.body;
         console.log('PUT request data:', { id, _id, updateData });
+
+        // Validate slug for collections
+        if (page === 'collections' && slug !== undefined) {
+          if (!slug || typeof slug !== 'string' || slug.trim() === '') {
+            return res.status(400).json({
+              success: false,
+              message: 'Slug is required for collections',
+            });
+          }
+
+          // Check if slug is unique (excluding current document)
+          const existingSlug = await collection.findOne({
+            page: 'collections',
+            slug: slug.trim(),
+            _id: { $ne: new ObjectId(id) },
+          });
+
+          if (existingSlug) {
+            return res.status(400).json({
+              success: false,
+              message: 'Slug must be unique. This slug already exists.',
+            });
+          }
+        }
+
         await collection.updateOne(
           { _id: new ObjectId(id) },
-          { $set: { ...updateData, updatedAt: new Date() } }
+          {
+            $set: {
+              ...updateData,
+              ...(page === 'collections' && slug ? { slug: slug.trim() } : {}),
+              updatedAt: new Date(),
+            },
+          }
         );
         return res.status(200).json({ message: 'Section updated successfully' });
       }

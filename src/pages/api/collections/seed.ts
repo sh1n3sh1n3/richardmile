@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       createdAt: new Date(),
       updatedAt: new Date(),
       // Add CMS-specific fields
-      slug: item.id,
+      slug: item.id, // Use the existing id as slug
       seoTitle: `${item.name} - ${item.subtitle}`,
       seoDescription: item.description,
       tags: [

@@ -71,6 +71,10 @@ export const StyledHeroContent = styled('div')(({ theme }) => ({
   bottom: theme.spacing(10),
   backgroundColor: 'transparent',
   color: theme.palette.common.white,
+  [theme.breakpoints.down('md')]: {
+    bottom: theme.spacing(6),
+    textAlign: 'center',
+  },
   [theme.breakpoints.up('md')]: {
     bottom: theme.spacing(20),
   },

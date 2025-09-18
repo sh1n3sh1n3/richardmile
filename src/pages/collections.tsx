@@ -2,6 +2,7 @@ import { m } from 'framer-motion';
 // next
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 // @mui
 import { styled } from '@mui/material/styles';
 import {
@@ -176,6 +177,7 @@ CollectionsPage.getLayout = (page: React.ReactElement) => <MainLayout>{page}</Ma
 export default function CollectionsPage() {
   // const theme = useTheme();
   // const { translate } = useLocales();
+  const router = useRouter();
 
   const isOffset = useOffSetTop(SCROLL_HEIGHT);
 
@@ -266,6 +268,12 @@ export default function CollectionsPage() {
     setSelectedCategory(category);
   };
 
+  // Handle collection click
+  const handleCollectionClick = (collection: Collection) => {
+    const slug = collection.slug || collection.id;
+    router.push(`/collections/${slug}`);
+  };
+
   return (
     <>
       <Head>
@@ -331,7 +339,7 @@ export default function CollectionsPage() {
                 collections.map((item, index) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={item._id || item.id}>
                     <m.div variants={varFade().inUp}>
-                      <StyledCard>
+                      <StyledCard onClick={() => handleCollectionClick(item)}>
                         <StyledImage imageUp={item.imageUp} imageDown={item.imageDown} />
 
                         <Stack sx={{ textAlign: 'center' }}>
