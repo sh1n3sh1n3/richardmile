@@ -32,7 +32,7 @@ export default function Footer() {
     >
       <Container maxWidth="xl" sx={{ pt: 3 }}>
         <Typography variant="caption" sx={{ color: 'text.disabled', textTransform: 'uppercase' }}>
-          {`Richard Mille • ${pathname.split('/')[1] || 'Index'}`}
+          {`Alpine Creations • ${pathname.split('/')[1] || 'Index'}`}
         </Typography>
 
         <Divider sx={{ my: 3 }} />
@@ -197,7 +197,7 @@ export default function Footer() {
           }}
         >
           <Typography variant="body1" component="div">
-            © Richard Mille 2025
+            © Alpine Creations 2025
           </Typography>
 
           <LanguageBar />

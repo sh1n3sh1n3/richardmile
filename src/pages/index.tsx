@@ -36,7 +36,7 @@ export default function HomePage() {
     const fetchSections = async () => {
       try {
         setLoading(true);
-        setGlobalLoading(true, 'Loading Richard Mille...', 'page');
+        setGlobalLoading(true, 'Loading Alpine Creations...', 'page');
         setLoadingMessage('Fetching latest collections...');
 
         const response = await fetch('/api/sections/index');
@@ -67,9 +67,9 @@ export default function HomePage() {
     return (
       <>
         <Head>
-          <title>Loading... | Richard Mille</title>
+          <title>Loading... | Alpine Creations</title>
         </Head>
-        <LoadingScreen message="Loading Richard Mille..." showProgress={true} progress={100} />
+        <LoadingScreen message="Loading Alpine Creations..." showProgress={true} progress={100} />
       </>
     );
   }
@@ -77,7 +77,7 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title> The starting point for your next project | Richard Mille</title>
+        <title> The starting point for your next project | Alpine Creations</title>
       </Head>
 
       <ScrollProgress />

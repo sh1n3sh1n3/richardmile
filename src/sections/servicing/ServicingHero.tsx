@@ -48,14 +48,14 @@ export default function BrandConceptHero() {
       </StyledHero> */}
 
       <Container maxWidth="xl" component={MotionContainer}>
-        <StyledHeroContent sx={{ ...({ opacity: 0 }) }}>
+        <StyledHeroContent sx={{ ...{ opacity: 0 } }}>
           <Box sx={{ position: 'absolute', bottom: 0, left: 0 }}>
             <m.div variants={varFade().inUp}>
               <Box sx={{ maxWidth: 520 }}>
                 <Typography variant="h1">{`${translate('Servicing')}`}</Typography>
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                  Your Richard Mille watch is a finely tuned machine, and as such it requires proper
-                  care and attention in order to guarantee a long running life of carefree
+                  Your Alpine Creations watch is a finely tuned machine, and as such it requires
+                  proper care and attention in order to guarantee a long running life of carefree
                   operation.
                 </Typography>
               </Box>

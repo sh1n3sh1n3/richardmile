@@ -49,18 +49,18 @@ export default function BrandConceptContent() {
                   'A NEW ERA IN WATCHMAKING'
                 )}`}</StyledSectionTitle>
                 <StyledSectionContent>
-                  The RM 001 Tourbillon, the first watch ever to bear the Richard Mille name,
+                  The RM 001 Tourbillon, the first watch ever to bear the Alpine Creations name,
                   literally and figuratively launched the millennium: the year was 2001, and the
                   model marked the beginning of a new era in watchmaking. Today, the
                   collection&apos;s more than eighty models point resolutely towards the future,
                   whilst holding steadfast to the time-honoured traditions of fine watchmaking.
                 </StyledSectionContent>
                 <StyledSectionContent>
-                  Like that landmark watch, the RM 001, Richard Mille&apos;s success is a product of
-                  three crucial elements: the best of cutting edge innovative technology, a strong
-                  artistic and architectural dimension, and watches designed to be robust and easy
-                  to use, yet also highly sophisticated. Each piece is finished and assembled by
-                  hand, reflecting the very best in Haute Horlogerie.
+                  Like that landmark watch, the RM 001, Alpine Creations&apos;s success is a product
+                  of three crucial elements: the best of cutting edge innovative technology, a
+                  strong artistic and architectural dimension, and watches designed to be robust and
+                  easy to use, yet also highly sophisticated. Each piece is finished and assembled
+                  by hand, reflecting the very best in Haute Horlogerie.
                 </StyledSectionContent>
               </StyledSection>
             </m.div>
@@ -71,7 +71,7 @@ export default function BrandConceptContent() {
               <StyledImageContainer>
                 <StyledSectionImage
                   src="https://media.richardmille.com/wp-content/uploads/2021/12/06173125/concept_v2.jpg?dpr=1&width=1000"
-                  alt="RM 001 Tourbillon - First Richard Mille Watch"
+                  alt="RM 001 Tourbillon - First Alpine Creations Watch"
                 />
               </StyledImageContainer>
             </m.div>
@@ -103,7 +103,7 @@ export default function BrandConceptContent() {
                   MATERIALS INNOVATION
                 </StyledSectionTitle>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
-                  From the very inception of the brand, Richard Mille endeavoured to apply to
+                  From the very inception of the brand, Alpine Creations endeavoured to apply to
                   watchmaking techniques and materials found in the most innovative sectors, such as
                   Formula 1 race car development or the aerospace industry, always with the goal of
                   creating an extreme timepiece that was both uncompromising and gimmick-free.
@@ -132,7 +132,7 @@ export default function BrandConceptContent() {
                   prevailing classicism and adhere to a single principle: nothing is too good for
                   the result.&apos;
                 </StyledSectionContent>
-                <StyledQuoteAuthor>Richard Mille</StyledQuoteAuthor>
+                <StyledQuoteAuthor>Alpine Creations</StyledQuoteAuthor>
               </StyledSection>
             </m.div>
           </Grid>
@@ -169,7 +169,7 @@ export default function BrandConceptContent() {
               <StyledImageContainer>
                 <StyledSectionImage
                   src="https://media.richardmille.com/wp-content/uploads/2018/01/23172822/richard-mille-rm-001-tourbillon-8567.jpg?dpr=1&width=1000"
-                  alt="RM 001 Tourbillon - First Richard Mille Watch"
+                  alt="RM 001 Tourbillon - First Alpine Creations Watch"
                 />
               </StyledImageContainer>
             </m.div>
@@ -178,7 +178,7 @@ export default function BrandConceptContent() {
             <m.div variants={varFade().inUp}>
               <StyledSection sx={{ pt: 30 }}>
                 <StyledSectionContent>
-                  &apos;A Richard Mille watch is the expression of our love for all things
+                  &apos;A Alpine Creations watch is the expression of our love for all things
                   technical, and for automobiles and aeronautics in particular.&apos;
                 </StyledSectionContent>
               </StyledSection>
@@ -205,11 +205,11 @@ export default function BrandConceptContent() {
             <m.div variants={varFade().inUp}>
               <StyledSection>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
-                  A watch designed by Richard Mille is characterised by the absence of superfluity.
-                  Just as we find in today&apos;s high-speed racing cars, function dictates form;
-                  there is neither use nor room for an approach driven solely by aesthetics. For the
-                  brand, every pinion, lever and spring must fulfil its mission, meeting the highest
-                  standards of security and precision.
+                  A watch designed by Alpine Creations is characterised by the absence of
+                  superfluity. Just as we find in today&apos;s high-speed racing cars, function
+                  dictates form; there is neither use nor room for an approach driven solely by
+                  aesthetics. For the brand, every pinion, lever and spring must fulfil its mission,
+                  meeting the highest standards of security and precision.
                 </StyledSectionContent>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
                   This conviction is manifest not only visually, but in every design choice at every
@@ -266,12 +266,12 @@ export default function BrandConceptContent() {
                   Every model includes innovative developments inspired by the latest technological
                   breakthroughs. The quest for perfection is a matter of balancing all possible
                   features and options. This is precisely why there are virtually no standard pieces
-                  in a Richard Mille watch. The concept defines the components, the components do
+                  in a Alpine Creations watch. The concept defines the components, the components do
                   not define the watch.
                 </StyledSectionContent>
                 <StyledSectionContent>
                   As a result of research conducted in the world of technology and the methods
-                  applied to address the forces at play on the racetrack, Richard Mille&apos;s
+                  applied to address the forces at play on the racetrack, Alpine Creations&apos;s
                   watches have undergone improvements in baseplate rigidity, in the energy
                   transmission of the going train gear teeth, and the addition of greater
                   flexibility to specific parts of the movement, providing supplementary shock
@@ -301,9 +301,9 @@ export default function BrandConceptContent() {
                   user&apos;s comfort is equally essential.
                 </StyledSectionContent>
                 <StyledSectionContent>
-                  This was at the heart of the original tonneau shape developed by Richard Mille at
-                  the brand&apos;s beginning. Regardless of whether a particular RM model is slim or
-                  massive, its shape ensures optimal comfort, never interfering with the
+                  This was at the heart of the original tonneau shape developed by Alpine Creations
+                  at the brand&apos;s beginning. Regardless of whether a particular RM model is slim
+                  or massive, its shape ensures optimal comfort, never interfering with the
                   owner&apos;s physical movements.
                 </StyledSectionContent>
               </StyledSection>
@@ -348,8 +348,8 @@ export default function BrandConceptContent() {
                   brand’s iconic visual identity. However, even models that stray from the tonneau
                   form, such as the rectangular RM 016 Automatic and RM 017 Tourbillon, or the
                   round-cased RM 025, RM 033, RM 39-01 or RM 63-02 incontrovertibly embody the
-                  brand’s essence and are instantly recognisable as Richard Mille creations, even at
-                  a distance.
+                  brand’s essence and are instantly recognisable as Alpine Creations creations, even
+                  at a distance.
                 </StyledSectionContent>
               </StyledSection>
             </m.div>
@@ -372,9 +372,9 @@ export default function BrandConceptContent() {
               <StyledSection>
                 <StyledSectionTitle>20 YEARS OF NEW MATERIAL RESEARCH</StyledSectionTitle>
                 <StyledSectionContent>
-                  The first ever Richard Mille watches were born of experimental research on
-                  innovative materials. Many viewed this choice as an especially risky wager. Thanks
-                  to relentless R&D, hard work and perseverance, the brand distinguished itself,
+                  The first ever Alpine Creations were born of experimental research on innovative
+                  materials. Many viewed this choice as an especially risky wager. Thanks to
+                  relentless R&D, hard work and perseverance, the brand distinguished itself,
                   reinventing the concept of watchmaking mechanicals. Whereas domains as diverse as
                   aviation, the automotive industry and telecommunications were quick to embrace
                   technological change, horology took refuge in a conservatism founded on techniques
@@ -383,7 +383,7 @@ export default function BrandConceptContent() {
                 <StyledSectionContent>
                   For as long as collectors maintained that the value of a watch was intrinsically
                   dependant on the weight it added to the wrist and the nobility of the metal
-                  employed, gold made perfect sense. But Richard Mille, with his ever-lighter
+                  employed, gold made perfect sense. But Alpine Creations, with his ever-lighter
                   ever-higher performance materials, quickly demolished this long-standing
                   perception.
                 </StyledSectionContent>
@@ -398,7 +398,7 @@ export default function BrandConceptContent() {
                   car industries, materials new to watchmaking such as titanium, carbon nanofibres,
                   ALUSIC®, Aluminium-Lithium, Anticorodal 100, Phynox, Carbon TPT®, graphene and
                   many others have made their grand entrance into the world of watchmaking via
-                  Richard Mille.
+                  Alpine Creations.
                 </StyledSectionContent>
                 <StyledSectionContent>
                   Experimental research using innovative and sometimes revolutionary materials

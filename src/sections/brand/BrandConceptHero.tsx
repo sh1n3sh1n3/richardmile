@@ -48,14 +48,14 @@ export default function BrandConceptHero() {
       </StyledHero>
 
       <Container maxWidth="xl" component={MotionContainer}>
-        <StyledHeroContent sx={{ ...({ opacity: 0 }) }}>
+        <StyledHeroContent sx={{ ...{ opacity: 0 } }}>
           <Box sx={{ position: 'absolute', bottom: 0, left: 0 }}>
             <m.div variants={varFade().inUp}>
               <Box sx={{ maxWidth: 520 }}>
                 <Typography variant="h1">{`${translate('Concept')}`}</Typography>
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
                   Diminutive marvels of technology, painstakingly produced in limited quantities,
-                  Richard Mille timepieces are designed specifically for those with a true
+                  Alpine Creations timepieces are designed specifically for those with a true
                   appreciation of fine watchmaking.
                 </Typography>
               </Box>

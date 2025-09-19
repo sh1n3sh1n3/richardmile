@@ -50,7 +50,7 @@ export default function BrandHero() {
               <Box sx={{ maxWidth: 460 }}>
                 <Typography variant="h1">{`${translate('The Brand')}`}</Typography>
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
-                  The first watch to carry Richard Mille&apos;s name, the RM 001 Tourbillon,
+                  The first watch to carry Alpine Creations&apos;s name, the RM 001 Tourbillon,
                   launched the millennium and marked the beginning of a new era in watchmaking.
                 </Typography>
               </Box>

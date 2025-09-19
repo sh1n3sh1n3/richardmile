@@ -87,7 +87,7 @@ export default function ServicingContent() {
               <StyledImageContainer>
                 <StyledSectionImage
                   src="https://media.richardmille.com/wp-content/uploads/2017/12/23174448/RM056-04-e1573564149552.jpg?dpr=1&width=1000"
-                  alt="Richard Mille Watch Servicing"
+                  alt="Alpine Creations Watch Servicing"
                 />
               </StyledImageContainer>
             </m.div>
@@ -97,7 +97,7 @@ export default function ServicingContent() {
               <StyledSection>
                 <StyledSectionTitle sx={{ color: 'common.black' }}>COMMITMENT</StyledSectionTitle>
                 <StyledSectionContent sx={{ color: 'common.black', mb: { xs: 2, md: 0 } }}>
-                  Your Richard Mille watch is a sophisticated and complex mechanical device,
+                  Your Alpine Creations watch is a sophisticated and complex mechanical device,
                   designed and constructed using the most modern watchmaking techniques and
                   materials that exist. It has been assembled and optimised by master watchmakers.
                 </StyledSectionContent>
@@ -114,7 +114,7 @@ export default function ServicingContent() {
               <StyledImageContainer>
                 <StyledSectionImage
                   src="https://bo.richardmille.com/wp-content/uploads/2025/04/rm_037_sf_44-1.jpg?dpr=1&width=1000"
-                  alt="Richard Mille Watch Servicing"
+                  alt="Alpine Creations Watch Servicing"
                 />
               </StyledImageContainer>
             </m.div>
@@ -139,7 +139,7 @@ export default function ServicingContent() {
               <StyledImageContainer>
                 <StyledSectionImage
                   src="https://media.richardmille.com/wp-content/uploads/2019/02/23171032/warranty.jpg?dpr=1&width=1000"
-                  alt="Richard Mille Watch Servicing"
+                  alt="Alpine Creations Watch Servicing"
                 />
               </StyledImageContainer>
             </m.div>
@@ -154,10 +154,10 @@ export default function ServicingContent() {
                   A UNIQUE 3+2 WARRANTY SERVICE CONCEPT
                 </StyledSectionContent>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
-                  Each Richard Mille timepiece is accompanied by a unique warranty card embedded
+                  Each Alpine Creations timepiece is accompanied by a unique warranty card embedded
                   with a holographic security seal on its surface issued by our manufacture in Les
                   Breuleux, Switzerland. In addition, this document is signed and dated by the
-                  official Richard Mille boutique staff at the time of purchase.
+                  official Alpine Creations boutique staff at the time of purchase.
                 </StyledSectionContent>
               </StyledSection>
             </m.div>
@@ -168,7 +168,7 @@ export default function ServicingContent() {
               <StyledImageContainer>
                 <StyledSectionImage
                   src="https://bo.richardmille.com/wp-content/uploads/2025/04/RM-43-01-Digital-passporbigt.jpg?dpr=1&width=1000"
-                  alt="Richard Mille Watch Servicing"
+                  alt="Alpine Creations Watch Servicing"
                 />
               </StyledImageContainer>
             </m.div>
@@ -180,10 +180,10 @@ export default function ServicingContent() {
                   Digital Warranty
                 </StyledSectionTitle>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
-                  Richard Mille is introducing a new vision of watch ownership with a fully digital
-                  warranty platform designed to replace traditional physical guarantees. Based on
-                  the blockchain technology, this system ensures the authenticity and traceability
-                  of each timepiece.
+                  Alpine Creations is introducing a new vision of watch ownership with a fully
+                  digital warranty platform designed to replace traditional physical guarantees.
+                  Based on the blockchain technology, this system ensures the authenticity and
+                  traceability of each timepiece.
                 </StyledSectionContent>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
                   The RM 43-01 and RM UP-01 Ferrari are the first models to feature full digital
@@ -251,7 +251,7 @@ export default function ServicingContent() {
               <StyledImageContainer>
                 <StyledSectionImage
                   src="https://media.richardmille.com/wp-content/uploads/2017/12/23174509/CF061007Nom-Personnalise%CC%81.jpg?dpr=1&width=1000"
-                  alt="Richard Mille Watch Servicing"
+                  alt="Alpine Creations Watch Servicing"
                 />
               </StyledImageContainer>
             </m.div>
@@ -263,12 +263,12 @@ export default function ServicingContent() {
                   MAINTENANCE PROGRAM
                 </StyledSectionTitle>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
-                  Regular maintenance is essential for keeping your Richard Mille watch in perfect
-                  working order over the long term. Each phase of the maintenance schedule must be
-                  completed within the timeframes and intervals indicated to ensure your watch
-                  continues to deliver performance and reliability. Bear in mind that the specific
-                  operations involved in maintenance may vary according to the conditions under
-                  which a watch is used.
+                  Regular maintenance is essential for keeping your Alpine Creations watch in
+                  perfect working order over the long term. Each phase of the maintenance schedule
+                  must be completed within the timeframes and intervals indicated to ensure your
+                  watch continues to deliver performance and reliability. Bear in mind that the
+                  specific operations involved in maintenance may vary according to the conditions
+                  under which a watch is used.
                 </StyledSectionContent>
                 <StyledSectionContent sx={{ color: 'common.black' }}>
                   The intervention may involve only the case, or may also include the movement of
@@ -284,7 +284,7 @@ export default function ServicingContent() {
                   of in-house, maintenance of certain tourbillons and grand complications is
                   conducted by Audemars Piguet Le Locle, in the Neuchâtel Canton of Switzerland. All
                   cases, for both automatic and tourbillon watches, are reviewed and polished at the
-                  Richard Mille case factory, in Les Breuleux, Switzerland.
+                  Alpine Creations case factory, in Les Breuleux, Switzerland.
                 </StyledSectionContent>
               </StyledSection>
             </m.div>

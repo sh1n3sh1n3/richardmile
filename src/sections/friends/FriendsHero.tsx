@@ -43,7 +43,7 @@ export default function FriendsHero() {
     video: 'https://video.richardmille.com/desktop/1290861657.mp4',
     title: 'Friends & partners',
     description:
-      "Discover the brand through its partners. Richard Mille's friends are varied and contrasting. Meet them.",
+      "Discover the brand through its partners. Alpine Creations's friends are varied and contrasting. Meet them.",
   };
 
   const FriendsHeroContent = heroContent || fallbackContent;

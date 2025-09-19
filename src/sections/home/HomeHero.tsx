@@ -339,7 +339,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
                   canNavigate={!isScrolling}
                   onClick={() => scrollToNextSection()}
                   isScrolling={isScrolling}
-                  isStop={currentSection === 5}
+                  isStop={currentSection === sections.length - 1}
                 />
               </m.section>
             ))}

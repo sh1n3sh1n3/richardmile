@@ -26,7 +26,7 @@ function FriendsPageContent() {
     return (
       <>
         <Head>
-          <title>Loading... | Richard Mille</title>
+          <title>Loading... | Alpine Creations</title>
         </Head>
         <LoadingScreen message="Loading Friends..." showProgress={true} progress={75} />
       </>
@@ -36,7 +36,7 @@ function FriendsPageContent() {
   return (
     <>
       <Head>
-        <title> The starting point for your next project | Richard Mille</title>
+        <title> The starting point for your next project | Alpine Creations</title>
       </Head>
 
       <ScrollProgress />

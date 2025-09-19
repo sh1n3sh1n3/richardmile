@@ -293,7 +293,7 @@ export default function FriendsAdminPage() {
   return (
     <FriendsProvider>
       <Head>
-        <title>Friends Admin | Richard Mille</title>
+        <title>Friends Admin | Alpine Creations</title>
       </Head>
       <FriendsAdminContent />
     </FriendsProvider>

@@ -19,7 +19,7 @@ export default function ServicingConceptPage() {
   return (
     <>
       <Head>
-        <title>The Servicing | Richard Mille</title>
+        <title>The Servicing | Alpine Creations</title>
       </Head>
 
       <ScrollProgress />

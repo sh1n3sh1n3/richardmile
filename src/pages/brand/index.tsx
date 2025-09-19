@@ -19,7 +19,7 @@ export default function BrandPage() {
   return (
     <>
       <Head>
-        <title>The Brand | Richard Mille</title>
+        <title>The Brand | Alpine Creations</title>
       </Head>
 
       <ScrollProgress />

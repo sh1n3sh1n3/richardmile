@@ -174,7 +174,7 @@ export default function CollectionSlugPage() {
     return (
       <>
         <Head>
-          <title>Loading Collection... | Richard Mille</title>
+          <title>Loading Collection... | Alpine Creations</title>
         </Head>
         <LoadingScreen message="Loading Collection..." showProgress={true} progress={100} />
       </>
@@ -215,7 +215,7 @@ export default function CollectionSlugPage() {
     <>
       <Head>
         <title>
-          {collection.seoTitle || `${collection.name} - ${collection.subtitle}`} | Richard Mille
+          {collection.seoTitle || `${collection.name} - ${collection.subtitle}`} | Alpine Creations
         </title>
         <meta name="description" content={collection.seoDescription || collection.description} />
       </Head>

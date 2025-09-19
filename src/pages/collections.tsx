@@ -277,7 +277,7 @@ export default function CollectionsPage() {
   return (
     <>
       <Head>
-        <title>Collections | Richard Mille</title>
+        <title>Collections | Alpine Creations</title>
       </Head>
 
       <ScrollProgress />
@@ -286,7 +286,7 @@ export default function CollectionsPage() {
         <Container maxWidth={false} component={MotionContainer}>
           <StyledHero isOffset={isOffset}>
             <m.div variants={varFade().inUp}>
-              <StyledTitle>Richard Mille Watches</StyledTitle>
+              <StyledTitle>Alpine Creations Collections</StyledTitle>
             </m.div>
 
             <m.div variants={varFade().inUp}>
@@ -380,7 +380,7 @@ export default function CollectionsPage() {
             >
               <Typography variant="caption" sx={{ color: 'text.disabled', fontWeight: 700 }}>
                 Diminutive marvels of technology, painstakingly produced in limited quantities,
-                Richard Mille timepieces are designed specifically for men and women with a true
+                Alpine Creations timepieces are designed specifically for men and women with a true
                 appreciation for the art of fine watchmaking.
               </Typography>
             </Box>

@@ -42,7 +42,7 @@ export default function CMSPage() {
   return (
     <FriendsHeroProvider>
       <Head>
-        <title>Richard Mille CMS</title>
+        <title>Alpine Creations CMS</title>
       </Head>
 
       <Typography variant="h4" gutterBottom>

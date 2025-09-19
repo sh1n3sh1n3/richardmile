@@ -19,13 +19,13 @@ export default function BrandConceptPage() {
   return (
     <>
       <Head>
-        <title>The Brand | Richard Mille</title>
+        <title>The Brand | Alpine Creations</title>
       </Head>
 
       <ScrollProgress />
 
       <BrandConceptHero />
-      
+
       <Box
         sx={{
           overflow: 'visible',
