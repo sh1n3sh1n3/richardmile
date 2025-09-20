@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 // locales
 // import { useLocales } from 'src/locales';
+// components
+import { PageHead } from '../components/head';
 // hooks
 // assets
 import { collections } from 'src/assets/data/collections';
@@ -276,9 +278,10 @@ export default function CollectionsPage() {
 
   return (
     <>
-      <Head>
-        <title>Collections | Alpine Creations</title>
-      </Head>
+      <PageHead
+        title="Collections"
+        description="Discover our exclusive collections of premium products"
+      />
 
       <ScrollProgress />
 

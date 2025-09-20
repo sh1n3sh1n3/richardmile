@@ -28,6 +28,11 @@ module.exports = {
     MONGODB_URI:
       'mongodb+srv://admin:admin@cluster0.an4se.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
     // MINIO
+    // MINIO_ENDPOINT: 's3.waru.pro',
+    // MINIO_PORT: '443',
+    // MINIO_USE_SSL: 'true',
+    // MINIO_ACCESS_KEY: 'HnIl5UbQnoJUrakQQP9l',
+    // MINIO_SECRET_KEY: 'oNHBic1mPmaMcwVscbTGoC0I1WnAFls4eViSkfQl',
     MINIO_ENDPOINT: 'play.min.io',
     MINIO_PORT: '443',
     MINIO_USE_SSL: 'true',

@@ -8,6 +8,7 @@ import MainLayout from 'src/layouts/main';
 // components
 import ScrollProgress from '../components/scroll-progress';
 import { LoadingScreen, RichardMilleSpinner } from '../components/loading';
+import { PageHead } from '../components/head';
 import { useLoading } from '../contexts/LoadingContext';
 // sections
 import { HomeHero } from '../sections/home';
@@ -66,19 +67,18 @@ export default function HomePage() {
   if (loading) {
     return (
       <>
-        <Head>
-          <title>Loading... | Alpine Creations</title>
-        </Head>
-        <LoadingScreen message="Loading Alpine Creations..." showProgress={true} progress={100} />
+        <PageHead title="Loading..." />
+        <LoadingScreen message="Loading..." showProgress={true} progress={100} />
       </>
     );
   }
 
   return (
     <>
-      <Head>
-        <title> The starting point for your next project | Alpine Creations</title>
-      </Head>
+      <PageHead
+        title="The starting point for your next project"
+        description="Discover our premium collection and experience luxury at its finest"
+      />
 
       <ScrollProgress />
 

@@ -8,6 +8,7 @@ import MainLayout from 'src/layouts/main';
 import { FriendsHero, FriendsContent } from 'src/sections/friends';
 import ScrollProgress from '../components/scroll-progress';
 import { LoadingScreen } from '../components/loading';
+import { PageHead } from '../components/head';
 import { FriendsPageProvider, useFriendsPageContext } from 'src/contexts/FriendsPageContext';
 // sections
 
@@ -25,9 +26,7 @@ function FriendsPageContent() {
   if (loading) {
     return (
       <>
-        <Head>
-          <title>Loading... | Alpine Creations</title>
-        </Head>
+        <PageHead title="Loading..." />
         <LoadingScreen message="Loading Friends..." showProgress={true} progress={75} />
       </>
     );
@@ -35,9 +34,10 @@ function FriendsPageContent() {
 
   return (
     <>
-      <Head>
-        <title> The starting point for your next project | Alpine Creations</title>
-      </Head>
+      <PageHead
+        title="Friends & Partners"
+        description="Meet our friends and partners who share our passion for excellence"
+      />
 
       <ScrollProgress />
 

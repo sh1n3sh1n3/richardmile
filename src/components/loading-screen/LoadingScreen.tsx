@@ -3,6 +3,8 @@ import { m } from 'framer-motion';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
+// context
+import { useLogo } from '../../contexts/LogoContext';
 
 // ----------------------------------------------------------------------
 
@@ -44,10 +46,28 @@ export default function LoadingScreen({
 }: LoadingScreenProps) {
   const [mounted, setMounted] = useState(false);
 
+  // Try to get logo text and loading state from context
+  let logoText = '';
+  let isLogoLoaded = false;
+  try {
+    const { logoConfig, isLoaded } = useLogo();
+    logoText = logoConfig.text || '';
+    isLogoLoaded = isLoaded;
+  } catch (error) {
+    // No fallback - wait for logo to load
+    logoText = '';
+    isLogoLoaded = false;
+  }
+
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
     return null;
+  }
+
+  // Don't display anything until logo is loaded
+  if (!isLogoLoaded || !logoText.trim()) {
+    return <StyledRoot>{/* Empty loading screen - no logo text displayed */}</StyledRoot>;
   }
 
   return (
@@ -58,7 +78,7 @@ export default function LoadingScreen({
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <StyledTitle>ALPINE CREATIONS</StyledTitle>
+        <StyledTitle>{logoText.toUpperCase()}</StyledTitle>
       </m.div>
     </StyledRoot>
   );

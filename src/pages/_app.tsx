@@ -51,7 +51,9 @@ import SnackbarProvider from '../components/snackbar';
 import { MotionLazyContainer } from '../components/animate';
 import { SettingsProvider } from '../components/settings';
 import { LoadingProvider } from '../contexts/LoadingContext';
+import { LogoProvider } from '../contexts/LogoContext';
 import { PageTransition } from '../components/loading';
+import LogoConfigInitializer from '../components/LogoConfigInitializer';
 
 // ----------------------------------------------------------------------
 
@@ -81,17 +83,20 @@ export default function MyApp(props: MyAppProps) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <SettingsProvider>
             <LoadingProvider>
-              <MotionLazyContainer>
-                <ThemeProvider>
-                  <ThemeLocalization>
-                    <SnackbarProvider>
-                      <StyledChart />
-                      <ProgressBar />
-                      <PageTransition>{getLayout(<Component {...pageProps} />)}</PageTransition>
-                    </SnackbarProvider>
-                  </ThemeLocalization>
-                </ThemeProvider>
-              </MotionLazyContainer>
+              <LogoProvider>
+                <LogoConfigInitializer />
+                <MotionLazyContainer>
+                  <ThemeProvider>
+                    <ThemeLocalization>
+                      <SnackbarProvider>
+                        <StyledChart />
+                        <ProgressBar />
+                        <PageTransition>{getLayout(<Component {...pageProps} />)}</PageTransition>
+                      </SnackbarProvider>
+                    </ThemeLocalization>
+                  </ThemeProvider>
+                </MotionLazyContainer>
+              </LogoProvider>
             </LoadingProvider>
           </SettingsProvider>
         </LocalizationProvider>

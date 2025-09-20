@@ -351,7 +351,7 @@ export default function FriendsHeroManager() {
                       setEditingContent({ ...editingContent, description: e.target.value })
                     }
                     required
-                    placeholder="e.g., Discover the brand through its partners. Alpine Creations's friends are varied and contrasting. Meet them."
+                    placeholder="e.g., Discover the brand through its partners. "
                   />
                 </Grid>
                 <Grid item xs={12}>

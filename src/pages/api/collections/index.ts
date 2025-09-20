@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ObjectId } from 'mongodb';
-import { getDatabase, closeMongoDBConnection } from '../../../utils/mongodb';
+import { getDatabase } from '../../../utils/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -125,7 +125,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       message: 'Internal server error',
       error: error instanceof Error ? error.message : 'Unknown error',
     });
-  } finally {
-    await closeMongoDBConnection();
   }
 }

@@ -27,7 +27,15 @@ export function FriendsHeroProvider({ children }: FriendsHeroProviderProps) {
       const response = await fetch('/api/cms/friends-hero');
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch hero content: ${response.status}`);
+        // Try to get more specific error information
+        let errorMessage = `Failed to fetch hero content: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch (parseError) {
+          // If we can't parse the error response, use the status-based message
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -36,6 +44,15 @@ export function FriendsHeroProvider({ children }: FriendsHeroProviderProps) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch hero content';
       setError(errorMessage);
       console.error('Error fetching hero content:', err);
+
+      // Set default content if fetch fails
+      setHeroContent({
+        video: 'https://video.richardmille.com/desktop/1290861657.mp4',
+        title: 'Friends & partners',
+        description:
+          "Discover the brand through its partners. Alpine Creations's friends are varied and contrasting. Meet them.",
+        isActive: true,
+      });
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Head from 'next/head';
 import { Box, Tabs, Tab, Typography } from '@mui/material';
 import CMSLayout from 'src/layouts/cms/CMSLayout';
 import IndexPageManager from 'src/components/cms/IndexPageManager';
@@ -7,6 +6,8 @@ import FriendsPageManager from 'src/components/cms/FriendsPageManager';
 import CollectionsPageManager from 'src/components/cms/CollectionsPageManager';
 import FriendsHeroManager from 'src/components/cms/FriendsHeroManager';
 import { FriendsHeroProvider } from 'src/contexts/FriendsHeroContext';
+import LogoManager from 'src/components/cms/LogoManager';
+import { PageHead } from 'src/components/head';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,9 +42,7 @@ export default function CMSPage() {
 
   return (
     <FriendsHeroProvider>
-      <Head>
-        <title>Alpine Creations CMS</title>
-      </Head>
+      <PageHead title="CMS" />
 
       <Typography variant="h4" gutterBottom>
         Content Management System
@@ -93,6 +92,7 @@ export default function CMSPage() {
           <Tab label="Friends & Partners" />
           <Tab label="Friends Hero" />
           <Tab label="Collections" />
+          <Tab label="Logo" />
         </Tabs>
       </Box>
 
@@ -110,6 +110,10 @@ export default function CMSPage() {
 
       <TabPanel value={tabValue} index={3}>
         <CollectionsPageManager />
+      </TabPanel>
+
+      <TabPanel value={tabValue} index={4}>
+        <LogoManager />
       </TabPanel>
     </FriendsHeroProvider>
   );

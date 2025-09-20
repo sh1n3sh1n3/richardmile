@@ -3,7 +3,9 @@ import { forwardRef } from 'react';
 import NextLink from 'next/link';
 // @mui
 // import { useTheme } from '@mui/material/styles';
-import { Box, Link, BoxProps } from '@mui/material';
+import { Box, Link, BoxProps, Typography } from '@mui/material';
+// context
+import { useLogo } from 'src/contexts/LogoContext';
 
 // ----------------------------------------------------------------------
 
@@ -13,6 +15,20 @@ export interface LogoProps extends BoxProps {
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ disabledLink = false, sx, ...other }, ref) => {
+    // Try to use logo context, fallback to default if not available
+    let logoConfig;
+
+    try {
+      const logoContext = useLogo();
+      logoConfig = logoContext.logoConfig;
+    } catch (error) {
+      // Fallback to default values if context is not available
+      logoConfig = {
+        text: 'Alpine Creations',
+        imageUrl: '/logo/logo.svg',
+      };
+    }
+
     // const theme = useTheme();
 
     // const PRIMARY_LIGHT = theme.palette.primary.light;
@@ -25,17 +41,30 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     // -------------------------------------------------------
     const logo = (
       <Box
-        component="img"
-        src="/logo/logo.svg"
-        sx={{ 
-          width: { xs: 120, md: 160 }, 
-          height: { xs: 30, md: 40 }, 
+        ref={ref}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
           cursor: 'pointer',
-          filter: 'brightness(0) invert(1)',
-          objectFit: 'contain',
-          ...sx 
+          ...sx,
         }}
-      />
+        {...other}
+      >
+        {/* Logo Image */}
+        {logoConfig.imageUrl && (
+          <Box
+            component="img"
+            src={logoConfig.imageUrl}
+            sx={{
+              width: { xs: 120, md: 160 },
+              height: { xs: 30, md: 40 },
+              filter: 'brightness(0) invert(1)',
+              objectFit: 'contain',
+              mr: logoConfig.text ? 2 : 0,
+            }}
+          />
+        )}
+      </Box>
     );
 
     // const logo = (

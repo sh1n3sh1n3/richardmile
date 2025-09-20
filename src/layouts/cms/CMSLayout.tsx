@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Box, Container } from '@mui/material';
+import { GlobalMetadata } from '../../components/head';
 
 interface CMSLayoutProps {
   children: ReactNode;
@@ -8,6 +9,7 @@ interface CMSLayoutProps {
 export default function CMSLayout({ children }: CMSLayoutProps) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <GlobalMetadata />
       {/* <AppBar position="static" sx={{ bgcolor: 'primary.main' }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

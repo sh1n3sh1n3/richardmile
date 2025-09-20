@@ -50,23 +50,11 @@ const navConfig = [
     title: 'FRIENDS & PARTNERS',
     path: PATH_PAGE.friends,
   },
-  {
-    title: 'STORE LOCATOR',
-    path: '#',
-  },
-  {
-    title: 'EVENTS',
-    path: '#',
-  },
 ];
 
 const subItemConfig1 = [
   {
     title: 'Historical models',
-    path: '#',
-  },
-  {
-    title: 'Pre-Owned',
     path: '#',
   },
 ];

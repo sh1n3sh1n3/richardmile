@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ObjectId } from 'mongodb';
-import { getDatabase, closeMongoDBConnection } from '../../../../utils/mongodb';
+import { getDatabase } from '../../../../utils/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -108,7 +108,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error) {
     console.error('API error:', error);
     return res.status(500).json({ message: 'Internal server error' });
-  } finally {
-    await closeMongoDBConnection();
   }
 }

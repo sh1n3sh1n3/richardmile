@@ -7,6 +7,7 @@ const minioClient = new Minio.Client({
   useSSL: process.env.MINIO_USE_SSL === 'true',
   accessKey: process.env.MINIO_ACCESS_KEY || 'minioadmin',
   secretKey: process.env.MINIO_SECRET_KEY || 'minioadmin',
+  pathStyle: true,
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -39,6 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await minioClient.makeBucket(bucketName);
       }
     } catch (e) {
+      console.log(e);
       return res.status(500).json({ message: 'MinIO service unavailable' });
     }
 
@@ -76,5 +78,3 @@ export const config = {
     },
   },
 };
-
-

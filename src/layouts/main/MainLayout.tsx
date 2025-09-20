@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import Nav from './nav/Nav';
 import Header from './Header';
 import Footer from './Footer';
+import { GlobalMetadata } from '../../components/head';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ export default function MainLayout({ children }: Props) {
 
   return (
     <Box>
+      <GlobalMetadata />
       <Header openNav={open} setOpenNav={setOpen} />
 
       <Box
