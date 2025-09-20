@@ -11,9 +11,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     try {
       const db = await getDatabase();
+      if (!db) {
+        throw new Error('Database connection failed');
+      }
       const collection = db.collection('logo_config');
 
-      const config = await collection.findOne({ _id: 'default' });
+      const config = await collection.findOne({ configId: 'default' });
 
       if (config) {
         const { _id, ...logoConfig } = config;
@@ -45,13 +48,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       const db = await getDatabase();
+      if (!db) {
+        throw new Error('Database connection failed');
+      }
       const collection = db.collection('logo_config');
 
       // Upsert the configuration
       await collection.replaceOne(
-        { _id: 'default' },
+        { configId: 'default' },
         {
-          _id: 'default',
+          configId: 'default',
           text,
           imageUrl,
           updatedAt: new Date(),
