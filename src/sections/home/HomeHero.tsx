@@ -22,6 +22,7 @@ interface Section {
   title: string;
   description: string;
   src: string;
+  router?: string;
 }
 
 interface HomeHeroProps {
@@ -87,6 +88,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
         title: 'RICHARD MILLE UNIVERSE',
         description: 'The story behind',
         src: 'https://video.richardmille.com/mobile/the-brand-history-rm-homepage.mp4',
+        router: undefined,
       },
       {
         _id: '2',
@@ -95,6 +97,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
         title: 'SAPPHIRE',
         description: 'A Material Beyond Compare',
         src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
+        router: undefined,
       },
       {
         _id: '3',
@@ -103,6 +106,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
         description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/header-collection-women-04_1.mp4',
+        router: undefined,
       },
       {
         _id: '4',
@@ -111,6 +115,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
         description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/30-01-LMC_packshot_169_header-1.mp4',
+        router: undefined,
       },
       {
         _id: '5',
@@ -119,6 +124,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
         description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/RM-33-03_packshot_169-header.mp4',
+        router: undefined,
       },
       {
         _id: '6',
@@ -127,6 +133,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
         description: 'The story behind',
         hasVideo: true,
         src: 'https://video.richardmille.com/mobile/RMB01_packshot_169_header-2.mp4',
+        router: undefined,
       },
     ],
     []
@@ -329,6 +336,7 @@ export default function HomeHero({ sections: propSections, loading = false }: Ho
                   label={item.label}
                   title={item.title}
                   description={item.description}
+                  router={item.router || undefined}
                 />
 
                 {/* Processing button for each video section */}

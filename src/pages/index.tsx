@@ -26,6 +26,7 @@ interface Section {
   title: string;
   description: string;
   src: string;
+  router?: string;
 }
 
 export default function HomePage() {

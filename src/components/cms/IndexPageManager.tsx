@@ -28,6 +28,7 @@ interface IndexSection {
   title: string;
   description: string;
   src: string;
+  router?: string;
 }
 
 // Media Preview Component
@@ -292,6 +293,7 @@ export default function IndexPageManager() {
               title: '',
               description: '',
               src: '',
+              router: '',
             });
             setEditDialog(true);
           }}
@@ -340,9 +342,18 @@ export default function IndexPageManager() {
                       />
                     )}
 
-                    <Typography variant="caption" display="block" sx={{ mb: 2 }}>
+                    <Typography variant="caption" display="block" sx={{ mb: 1 }}>
                       Media Type: {section.hasVideo ? 'Video' : 'Image'}
                     </Typography>
+                    {section.router && (
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        sx={{ mb: 2, color: 'primary.main' }}
+                      >
+                        Router: {section.router}
+                      </Typography>
+                    )}
 
                     <Box display="flex" justifyContent="space-between" mt={2}>
                       <IconButton
@@ -399,6 +410,18 @@ export default function IndexPageManager() {
                     onChange={(e) =>
                       setEditingSection({ ...editingSection, description: e.target.value })
                     }
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Router URL"
+                    placeholder="/something/something"
+                    value={editingSection.router || ''}
+                    onChange={(e) =>
+                      setEditingSection({ ...editingSection, router: e.target.value })
+                    }
+                    helperText="Enter the URL path for navigation (e.g., /collections/watches)"
                   />
                 </Grid>
                 <Grid item xs={12}>
