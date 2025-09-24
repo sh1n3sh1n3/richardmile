@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Box, Typography, LinearProgress, Alert } from '@mui/material';
@@ -24,7 +23,7 @@ const SimpleMediaPreview = ({
   src,
   isVideo,
   fileName,
-  onClick
+  onClick,
 }: {
   src: string;
   isVideo: boolean;
@@ -44,7 +43,7 @@ const SimpleMediaPreview = ({
           '&:hover': {
             transform: 'scale(1.02)',
             boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-          }
+          },
         }}
         onClick={onClick}
       >
@@ -77,7 +76,7 @@ const SimpleMediaPreview = ({
         '&:hover': {
           transform: 'scale(1.02)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-        }
+        },
       }}
       onClick={onClick}
     >
@@ -113,83 +112,86 @@ export default function CMSUpload({
   const [error, setError] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<any>(null);
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    if (acceptedFiles.length === 0) return;
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 0) return;
 
-    const file = acceptedFiles[0];
-    setUploading(true);
-    setError(null);
-    setProgress(0);
+      const file = acceptedFiles[0];
+      setUploading(true);
+      setError(null);
+      setProgress(0);
 
-    try {
-      // 1) Ask server for a presigned URL
-      const initRes = await fetch('/api/cms/upload-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileName: file.name,
-          contentType: file.type || 'application/octet-stream',
-          size: file.size,
-        }),
-      });
+      try {
+        // 1) Ask server for a presigned URL
+        const initRes = await fetch('/api/cms/upload-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            size: file.size,
+          }),
+        });
 
-      if (!initRes.ok) {
-        throw new Error('Failed to initialize upload');
-      }
-
-      const { uploadUrl, getUrl, objectKey } = await initRes.json();
-
-      // 2) Upload directly to MinIO using the presigned URL
-      const uploadReq = new XMLHttpRequest();
-      await new Promise<void>((resolve, reject) => {
-        uploadReq.upload.onprogress = (event) => {
-          if (event.lengthComputable) {
-            setProgress((event.loaded / event.total) * 100);
-          }
-        };
-        uploadReq.onerror = () => reject(new Error('Direct upload failed'));
-        uploadReq.onload = () => {
-          if (uploadReq.status >= 200 && uploadReq.status < 300) {
-            resolve();
-          } else {
-            reject(new Error('Direct upload failed'));
-          }
-        };
-        uploadReq.open('PUT', uploadUrl, true);
-        if (file.type) {
-          uploadReq.setRequestHeader('Content-Type', file.type);
+        if (!initRes.ok) {
+          throw new Error('Failed to initialize upload');
         }
-        uploadReq.send(file);
-      });
 
-      // 3) Finalize: save metadata in DB
-      const finalizeRes = await fetch('/api/cms/upload-finalize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          objectKey,
-          originalName: file.name,
-          mimeType: file.type,
-          size: file.size,
-          url: getUrl,
-        }),
-      });
+        const { uploadUrl, getUrl, objectKey } = await initRes.json();
 
-      if (!finalizeRes.ok) {
-        throw new Error('Failed to save metadata');
+        // 2) Upload directly to MinIO using the presigned URL
+        const uploadReq = new XMLHttpRequest();
+        await new Promise<void>((resolve, reject) => {
+          uploadReq.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+              setProgress((event.loaded / event.total) * 100);
+            }
+          };
+          uploadReq.onerror = () => reject(new Error('Direct upload failed'));
+          uploadReq.onload = () => {
+            if (uploadReq.status >= 200 && uploadReq.status < 300) {
+              resolve();
+            } else {
+              reject(new Error('Direct upload failed'));
+            }
+          };
+          uploadReq.open('PUT', uploadUrl, true);
+          if (file.type) {
+            uploadReq.setRequestHeader('Content-Type', file.type);
+          }
+          uploadReq.send(file);
+        });
+
+        // 3) Finalize: save metadata in DB
+        const finalizeRes = await fetch('/api/cms/upload-finalize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            objectKey,
+            originalName: file.name,
+            mimeType: file.type,
+            size: file.size,
+            url: getUrl,
+          }),
+        });
+
+        if (!finalizeRes.ok) {
+          throw new Error('Failed to save metadata');
+        }
+
+        const result = await finalizeRes.json();
+        onUploadSuccess(result);
+        setUploadedFile(result);
+        setProgress(100);
+      } catch (err) {
+        setError('Upload failed. Please try again.');
+        console.error('Upload error:', err);
+      } finally {
+        setUploading(false);
       }
-
-      const result = await finalizeRes.json();
-      onUploadSuccess(result);
-      setUploadedFile(result);
-      setProgress(100);
-    } catch (err) {
-      setError('Upload failed. Please try again.');
-      console.error('Upload error:', err);
-    } finally {
-      setUploading(false);
-    }
-  }, [onUploadSuccess]);
+    },
+    [onUploadSuccess]
+  );
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
@@ -210,11 +212,12 @@ export default function CMSUpload({
           ...(uploading && {
             pointerEvents: 'none',
           }),
-          ...(existingMedia && !uploadedFile && {
-            borderColor: 'primary.main',
-            borderStyle: 'dashed',
-            backgroundColor: 'action.hover',
-          }),
+          ...(existingMedia &&
+            !uploadedFile && {
+              borderColor: 'primary.main',
+              borderStyle: 'dashed',
+              backgroundColor: 'action.hover',
+            }),
         }}
       >
         <input {...getInputProps()} />
