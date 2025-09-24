@@ -12,6 +12,7 @@ import { StyledHeroContent, StyledHeroVideo, StyledVideoOverlay } from '../styls
 
 interface CollectionHeroProps {
   collection?: {
+    background: any;
     name: string;
     subtitle: string;
     description: string;
@@ -32,7 +33,7 @@ export default function CollectionHero({ collection }: CollectionHeroProps) {
 
   const heroContent = collection
     ? {
-        video: 'https://video.richardmille.com/desktop/1290861657.mp4', // Default video, can be customized per collection
+        video: collection.background, // Default video, can be customized per collection
         title: collection.name,
         description: collection.description || collection.subtitle,
       }
