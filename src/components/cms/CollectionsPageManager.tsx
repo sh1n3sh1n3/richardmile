@@ -796,7 +796,7 @@ export default function CollectionsPageManager() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={6}>
                     <Typography variant="subtitle2" gutterBottom>
-                      Top Image
+                      1st View Image
                     </Typography>
                     <CMSUpload
                       onUploadSuccess={(r) => setEditing({ ...editing, topImage: r.url })}
@@ -810,7 +810,7 @@ export default function CollectionsPageManager() {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Typography variant="subtitle2" gutterBottom>
-                      Bottom Image
+                      2nd View Image
                     </Typography>
                     <CMSUpload
                       onUploadSuccess={(r) => setEditing({ ...editing, buttomImage: r.url })}
@@ -824,7 +824,7 @@ export default function CollectionsPageManager() {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Typography variant="subtitle2" gutterBottom>
-                      Left Image
+                      3rd View Image
                     </Typography>
                     <CMSUpload
                       onUploadSuccess={(r) => setEditing({ ...editing, leftImage: r.url })}
@@ -838,7 +838,7 @@ export default function CollectionsPageManager() {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Typography variant="subtitle2" gutterBottom>
-                      Right Image
+                      4th View Image
                     </Typography>
                     <CMSUpload
                       onUploadSuccess={(r) => setEditing({ ...editing, rightImage: r.url })}
