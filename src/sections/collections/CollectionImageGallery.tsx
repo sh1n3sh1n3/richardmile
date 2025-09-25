@@ -161,10 +161,10 @@ export default function CollectionImageGallery({ collection }: CollectionImageGa
   };
 
   const stepperItems = [
-    { key: 'top' as const, label: 'TOP VIEW', image: collection.topImage },
-    { key: 'right' as const, label: 'RIGHT VIEW', image: collection.rightImage },
-    { key: 'bottom' as const, label: 'BACK VIEW', image: collection.buttomImage },
-    { key: 'left' as const, label: 'LEFT VIEW', image: collection.leftImage },
+    { key: 'top' as const, label: '1st VIEW', image: collection.topImage },
+    { key: 'right' as const, label: '2nd VIEW', image: collection.rightImage },
+    { key: 'bottom' as const, label: '3rd VIEW', image: collection.buttomImage },
+    { key: 'left' as const, label: '4th VIEW', image: collection.leftImage },
   ].filter((item) => item.image); // Only show items that have images
 
   const handleStepperClick = (position: 'top' | 'bottom' | 'left' | 'right') => {

@@ -221,11 +221,14 @@ export default function CollectionSlugPage() {
         <meta name="description" content={collection.seoDescription || collection.description} />
       </Head>
 
-      <CollectionHero 
+      <CollectionHero
         collection={{
           ...collection,
-          background: collection.background || collection.introduction?.background || 'https://video.richardmille.com/desktop/1290861657.mp4'
-        }} 
+          background:
+            collection.background ||
+            collection.introduction?.background ||
+            'https://video.richardmille.com/desktop/1290861657.mp4',
+        }}
       />
 
       <CollectionIntroduction collection={collection} />
