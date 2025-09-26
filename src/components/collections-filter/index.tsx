@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 // @mui
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -38,9 +38,10 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 interface CollectionsFilterProps {
   onCategoryChange: (category: string) => void;
   selectedCategory: string;
+  categories?: Array<{ value: string; label: string }>;
 }
 
-const categories = [
+const defaultCategories = [
   { value: 'all', label: 'All Collections' },
   { value: 'Tourbillon', label: 'Tourbillon' },
   { value: 'Sapphire', label: 'Sapphire' },
@@ -53,11 +54,12 @@ const categories = [
 export default function CollectionsFilter({
   onCategoryChange,
   selectedCategory,
+  categories = defaultCategories,
 }: CollectionsFilterProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 

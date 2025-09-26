@@ -189,6 +189,41 @@ export default function CollectionsPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [usingFallback, setUsingFallback] = useState(false);
+  const [availableCategories, setAvailableCategories] = useState<
+    Array<{ value: string; label: string }>
+  >([]);
+
+  // Fetch available categories
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/collections/categories');
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        // Transform categories to the format expected by the Filter component
+        const categories = [
+          { value: 'all', label: 'All Collections' },
+          ...result.data.map((category: string) => ({
+            value: category,
+            label: category,
+          })),
+        ];
+        setAvailableCategories(categories);
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+      // Use default categories as fallback
+      setAvailableCategories([
+        { value: 'all', label: 'All Collections' },
+        { value: 'Tourbillon', label: 'Tourbillon' },
+        { value: 'Sapphire', label: 'Sapphire' },
+        { value: 'Ultraflat', label: 'Ultraflat' },
+        { value: 'Chronograph', label: 'Chronograph' },
+        { value: 'Extra Flat', label: 'Extra Flat' },
+        { value: 'Accessories', label: 'Accessories' },
+      ]);
+    }
+  };
 
   // Fetch collections data
   const fetchCollections = async (category: string = 'all') => {
@@ -260,7 +295,11 @@ export default function CollectionsPage() {
     }
   };
 
-  // Load collections on component mount
+  // Load categories and collections on component mount
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   useEffect(() => {
     fetchCollections(selectedCategory);
   }, [selectedCategory]);
@@ -297,6 +336,7 @@ export default function CollectionsPage() {
                 <Filter
                   onCategoryChange={handleCategoryChange}
                   selectedCategory={selectedCategory}
+                  categories={availableCategories}
                 />
               </Box>
             </m.div>

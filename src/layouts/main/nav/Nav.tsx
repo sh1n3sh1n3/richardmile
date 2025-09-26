@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 // @mui
-import { Box, Drawer, SwipeableDrawer } from '@mui/material';
+import { Box, Drawer } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 // hooks
 import useResponsive from 'src/hooks/useResponsive';
@@ -39,13 +39,13 @@ export default function Nav({ openNav, setOpenNav }: Props) {
         },
       }}
     >
-      <NavSection data={navConfig} onClick={() => setOpenNav(false)} />
+      <NavSection data={navConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );
 
-  const {easing} = theme.transitions;
+  const { easing } = theme.transitions;
   const durations = theme.transitions.duration;
 
   const desktopPaperSx = useMemo(
@@ -85,12 +85,10 @@ export default function Nav({ openNav, setOpenNav }: Props) {
           {renderContent}
         </Drawer>
       ) : (
-        <SwipeableDrawer
+        <Drawer
           open={openNav}
           onClose={() => setOpenNav(false)}
-          onOpen={() => setOpenNav(true)}
-          disableDiscovery
-          ModalProps={{ 
+          ModalProps={{
             keepMounted: true,
             disableScrollLock: false,
           }}
@@ -109,7 +107,7 @@ export default function Nav({ openNav, setOpenNav }: Props) {
           }}
         >
           {renderContent}
-        </SwipeableDrawer>
+        </Drawer>
       )}
     </Box>
   );
