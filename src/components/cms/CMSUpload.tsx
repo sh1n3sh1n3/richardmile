@@ -137,7 +137,7 @@ export default function CMSUpload({
           throw new Error('Failed to initialize upload');
         }
 
-        const { uploadUrl, getUrl, objectKey } = await initRes.json();
+        const { uploadUrl, previewUrl, publicUrl, objectKey } = await initRes.json();
 
         // 2) Upload directly to MinIO using the presigned URL
         const uploadReq = new XMLHttpRequest();
@@ -171,7 +171,7 @@ export default function CMSUpload({
             originalName: file.name,
             mimeType: file.type,
             size: file.size,
-            url: getUrl,
+            url: publicUrl, // Save public URL (no expiry) to backend
           }),
         });
 
@@ -180,8 +180,15 @@ export default function CMSUpload({
         }
 
         const result = await finalizeRes.json();
-        onUploadSuccess(result);
-        setUploadedFile(result);
+
+        // Use presigned URL for preview but public URL for saving
+        const previewResult = {
+          ...result,
+          url: previewUrl, // Use presigned URL for preview
+        };
+
+        onUploadSuccess(result); // Pass the original result with public URL to parent
+        setUploadedFile(previewResult); // Use preview URL for display
         setProgress(100);
       } catch (err) {
         setError('Upload failed. Please try again.');

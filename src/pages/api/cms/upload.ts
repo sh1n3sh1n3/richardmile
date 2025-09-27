@@ -87,7 +87,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('File uploaded to MinIO successfully with metadata:', metadata);
 
     // Generate accessible URL - use MinIO's public URL format
-    const fileUrl = `http://localhost:9000/${bucketName}/${fileName}`;
+    const minioHost = process.env.MINIO_ENDPOINT || 'localhost';
+    const minioPort = process.env.MINIO_PORT || '9000';
+    const minioProtocol = process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http';
+    const fileUrl = `${minioProtocol}://${minioHost}:${minioPort}/${bucketName}/${fileName}`;
 
     // Test if file is accessible
     let isPubliclyAccessible = false;
@@ -112,8 +115,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const presignedUrl = await minioClient.presignedGetObject(
           bucketName,
           fileName,
-          24 * 60 * 60
-        ); // 24 hours
+          7 * 24 * 60 * 60
+        ); // 7 days (maximum allowed by MinIO)
         finalUrl = presignedUrl;
         console.log('Generated presigned URL:', presignedUrl);
       } catch (presignError) {

@@ -52,13 +52,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const uploadUrl = await minioClient.presignedPutObject(bucketName, objectKey, expirySeconds);
 
     // Also provide a presigned GET for immediate preview after upload
-    const getUrl = await minioClient.presignedGetObject(bucketName, objectKey, 60 * 60 * 24); // 24h
+    const previewUrl = await minioClient.presignedGetObject(
+      bucketName,
+      objectKey,
+      7 * 24 * 60 * 60
+    ); // 7 days (maximum allowed by MinIO)
+
+    // Generate public URL for saving to backend (no expiry)
+    const minioHost = process.env.MINIO_ENDPOINT || 'localhost';
+    const minioPort = process.env.MINIO_PORT || '9000';
+    const minioProtocol = process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http';
+    const publicUrl = `${minioProtocol}://${minioHost}:${minioPort}/${bucketName}/${objectKey}`;
 
     return res.status(200).json({
       bucket: bucketName,
       objectKey,
       uploadUrl,
-      getUrl,
+      previewUrl, // For CMS preview (presigned, 7 days)
+      publicUrl, // For saving to backend (public, no expiry)
       // Echo back for client convenience
       contentType,
       size,
