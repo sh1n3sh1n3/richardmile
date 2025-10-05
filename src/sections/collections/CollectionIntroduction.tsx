@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { m } from 'framer-motion';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, IconButton, Stack } from '@mui/material';
+import Iconify from '../../components/iconify';
 // components
 import { MotionContainer, varFade } from '../../components/animate';
 
@@ -106,42 +107,45 @@ const StyledDescription = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const StyledImageContainer = styled(Box)(({ theme }) => ({
+const StyledSliderContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
   height: '600px',
-  display: 'flex',
-  gap: theme.spacing(2),
-  cursor: 'grab',
-  '&:active': {
-    cursor: 'grabbing',
-  },
+  overflow: 'hidden',
+  borderRadius: theme.shape.borderRadius,
   [theme.breakpoints.down('md')]: {
     height: '500px',
-    flexDirection: 'row',
-    overflowX: 'auto',
-    gap: theme.spacing(1),
   },
   [theme.breakpoints.down('sm')]: {
     height: '400px',
-    gap: theme.spacing(0.5),
   },
 }));
 
-const StyledImageWrapper = styled(Box)(({ theme }) => ({
-  flex: 1,
+const StyledSliderTrack = styled(Box)<{ translateX: number }>(({ translateX }) => ({
+  display: 'flex',
   height: '100%',
-  overflow: 'hidden',
-  borderRadius: theme.shape.borderRadius,
-  position: 'relative',
-  [theme.breakpoints.down('md')]: {
-    flex: '0 0 auto',
-    minWidth: '300px',
-  },
-  [theme.breakpoints.down('sm')]: {
-    minWidth: '250px',
-  },
+  transform: `translateX(${translateX}%)`,
+  transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
 }));
+
+const StyledSlide = styled(Box)<{ isActive: boolean; isSide: boolean }>(
+  ({ theme, isActive, isSide }) => ({
+    flex: isActive ? '0 0 50%' : '0 0 25%',
+    height: '100%',
+    overflow: 'hidden',
+    position: 'relative',
+    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+    opacity: 1,
+    transform: isActive ? 'scale(1)' : 'scale(0.95)',
+    zIndex: isActive ? 3 : isSide ? 2 : 1,
+    [theme.breakpoints.down('md')]: {
+      flex: isActive ? '0 0 60%' : '0 0 20%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      flex: isActive ? '0 0 70%' : '0 0 15%',
+    },
+  })
+);
 
 const StyledImage = styled('img')(({ theme }) => ({
   width: '100%',
@@ -153,9 +157,57 @@ const StyledImage = styled('img')(({ theme }) => ({
   pointerEvents: 'none',
 }));
 
+const StyledNavigationButton = styled(IconButton)(({ theme }) => ({
+  position: 'absolute',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  color: theme.palette.common.white,
+  width: '48px',
+  height: '48px',
+  zIndex: 10,
+  '&:hover': {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: '40px',
+    height: '40px',
+  },
+}));
+
+const StyledLeftButton = styled(StyledNavigationButton)(({ theme }) => ({
+  left: theme.spacing(2),
+}));
+
+const StyledRightButton = styled(StyledNavigationButton)(({ theme }) => ({
+  right: theme.spacing(2),
+}));
+
+const StyledDotsContainer = styled(Stack)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(2),
+  left: '50%',
+  transform: 'translateX(-50%)',
+  zIndex: 10,
+}));
+
+const StyledDot = styled(Box)<{ active: boolean }>(({ theme, active }) => ({
+  width: '12px',
+  height: '12px',
+  borderRadius: '50%',
+  backgroundColor: active ? theme.palette.common.white : 'rgba(255, 255, 255, 0.5)',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    backgroundColor: theme.palette.common.white,
+    transform: 'scale(1.2)',
+  },
+}));
+
 // ----------------------------------------------------------------------
 
 export default function CollectionIntroduction({ collection }: CollectionIntroductionProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -173,6 +225,31 @@ export default function CollectionIntroduction({ collection }: CollectionIntrodu
         'https://media.richardmille.com/wp-content/uploads/2022/09/21141757/RM-88view.png?dpr=1&width=187.5',
         'https://media.richardmille.com/wp-content/uploads/2023/02/10203219/RM88_back.png?dpr=1&width=250',
       ];
+
+  // Navigation functions
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const goToPrevious = () => {
+    setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const goToNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % images.length);
+  };
+
+  // Create extended array for infinite loop effect
+  const getVisibleSlides = () => {
+    if (images.length <= 1) return images;
+
+    const prevIndex = (currentSlide - 1 + images.length) % images.length;
+    const nextIndex = (currentSlide + 1) % images.length;
+
+    return [images[prevIndex], images[currentSlide], images[nextIndex]];
+  };
+
+  const visibleSlides = getVisibleSlides();
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setDragStart({ x: e.clientX, y: e.clientY });
@@ -197,14 +274,14 @@ export default function CollectionIntroduction({ collection }: CollectionIntrodu
     }
 
     const deltaX = e.clientX - dragStart.x;
-    const threshold = 50; // Minimum drag distance to trigger image change
+    const threshold = 50; // Minimum drag distance to trigger slide change
 
     if (Math.abs(deltaX) > threshold) {
-      // Swap images based on drag direction
-      const newImages = [...images].reverse();
-      // In a real implementation, you might want to update the collection data
-      // For now, we'll just log the action
-      console.log('Images swapped via drag');
+      if (deltaX > 0) {
+        goToPrevious();
+      } else {
+        goToNext();
+      }
     }
 
     setDragStart(null);
@@ -240,7 +317,11 @@ export default function CollectionIntroduction({ collection }: CollectionIntrodu
     const threshold = 50;
 
     if (Math.abs(deltaX) > threshold) {
-      console.log('Images swapped via touch drag');
+      if (deltaX > 0) {
+        goToPrevious();
+      } else {
+        goToNext();
+      }
     }
 
     setDragStart(null);
@@ -271,26 +352,62 @@ export default function CollectionIntroduction({ collection }: CollectionIntrodu
           {/* Image Section */}
           <StyledImageSection>
             <m.div variants={varFade().inRight}>
-              <StyledImageContainer
+              <StyledSliderContainer
                 ref={containerRef}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
-                onMouseLeave={() => setDragStart(null)}
+                onMouseLeave={() => {
+                  setDragStart(null);
+                }}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
-                {images.map((image, index) => (
-                  <StyledImageWrapper key={index}>
-                    <StyledImage
-                      src={image}
-                      alt={`${title} - Image ${index + 1}`}
-                      draggable={false}
-                    />
-                  </StyledImageWrapper>
-                ))}
-              </StyledImageContainer>
+                <StyledSliderTrack translateX={0}>
+                  {visibleSlides.map((image, index) => {
+                    const isActive = index === 1; // Center slide is always active
+                    const isSide = index === 0 || index === 2; // Side slides
+
+                    return (
+                      <StyledSlide
+                        key={`${currentSlide}-${index}`}
+                        isActive={isActive}
+                        isSide={isSide}
+                      >
+                        <StyledImage
+                          src={image}
+                          alt={`${title} - Image ${currentSlide + 1}`}
+                          draggable={false}
+                        />
+                      </StyledSlide>
+                    );
+                  })}
+                </StyledSliderTrack>
+
+                {/* Navigation Controls */}
+                {images.length > 1 && (
+                  <>
+                    <StyledLeftButton onClick={goToPrevious}>
+                      <Iconify icon="eva:arrow-left-fill" />
+                    </StyledLeftButton>
+
+                    <StyledRightButton onClick={goToNext}>
+                      <Iconify icon="eva:arrow-right-fill" />
+                    </StyledRightButton>
+
+                    <StyledDotsContainer direction="row" spacing={1}>
+                      {images.map((_, index) => (
+                        <StyledDot
+                          key={index}
+                          active={index === currentSlide}
+                          onClick={() => goToSlide(index)}
+                        />
+                      ))}
+                    </StyledDotsContainer>
+                  </>
+                )}
+              </StyledSliderContainer>
             </m.div>
           </StyledImageSection>
         </StyledContainer>
