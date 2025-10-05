@@ -51,7 +51,6 @@ const StyledContainer = styled('div')(({ theme }) => ({
   alignItems: 'flex-start',
   gap: '80px',
   padding: '0 10px',
-  maxWidth: '1400px !important',
   [theme.breakpoints.down('md')]: {
     flexDirection: 'column',
     gap: theme.spacing(4),
@@ -257,7 +256,7 @@ export default function CollectionIntroduction({ collection }: CollectionIntrodu
 
   return (
     <StyledRoot data-section="collection-content">
-      <Container maxWidth="xl" component={MotionContainer}>
+      <Container maxWidth={false} component={MotionContainer}>
         <StyledContainer>
           {/* Text Section */}
           <StyledTextSection>

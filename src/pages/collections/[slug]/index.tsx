@@ -9,6 +9,7 @@ import MainLayout from 'src/layouts/main';
 // components
 import LoadingScreen from 'src/components/loading-screen';
 import { useLoading } from 'src/contexts/LoadingContext';
+import { useLogo } from 'src/contexts/LogoContext';
 // sections
 import {
   CollectionHero,
@@ -46,6 +47,8 @@ interface Collection {
   seoDescription?: string;
   tags?: string[];
   background?: string;
+  useDefaultData?: boolean;
+  isDefault?: boolean;
   specifications?: {
     movement: string;
     powerReserve: string;
@@ -68,7 +71,21 @@ interface Collection {
     background: string;
     backgroundIsVideo: boolean;
   };
+  defaultIntroduction?: {
+    title: string;
+    description: string;
+    images1: string;
+    images2: string;
+    images3: string;
+    background: string;
+    backgroundIsVideo: boolean;
+  };
   production?: Array<{
+    title: string;
+    description: string;
+    imageSource: string;
+  }>;
+  defaultProduction?: Array<{
     title: string;
     description: string;
     imageSource: string;
@@ -105,7 +122,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   textAlign: 'center',
-  maxWidth: '1200px !important',
+  maxWidth: '1920px !important',
 }));
 
 // ----------------------------------------------------------------------
@@ -118,10 +135,28 @@ export default function CollectionSlugPage() {
   const router = useRouter();
   const { slug } = router.query;
   const { setLoading: setGlobalLoading, setLoadingMessage, setProgress } = useLoading();
+  const { logoConfig } = useLogo();
 
   const [collection, setCollection] = useState<Collection | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Fetch default collection data
+  const fetchDefaultCollection = async () => {
+    try {
+      setLoadingMessage('Fetching default collection...');
+      const response = await fetch('/api/collections/default');
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        return result.data;
+      }
+      return null;
+    } catch (err) {
+      console.error('Error fetching default collection:', err);
+      return null;
+    }
+  };
 
   // Fetch collection data
   const fetchCollection = async (collectionSlug: string) => {
@@ -138,11 +173,25 @@ export default function CollectionSlugPage() {
       const result: ApiResponse = await response.json();
       setProgress(80);
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || 'Failed to fetch collection');
+      let collectionData = result.data;
+
+      // If this collection uses default data, fetch the first collection's data
+      if (collectionData.useDefaultData) {
+        setLoadingMessage('Fetching default data...');
+        const defaultCollection = await fetchDefaultCollection();
+
+        console.log(defaultCollection);
+
+        if (defaultCollection) {
+          collectionData = {
+            ...collectionData,
+            introduction: defaultCollection.introduction,
+            production: defaultCollection.production,
+          };
+        }
       }
 
-      setCollection(result.data);
+      setCollection(collectionData);
       setLoadingMessage('Collection loaded successfully');
       setProgress(100);
     } catch (err) {
@@ -175,7 +224,7 @@ export default function CollectionSlugPage() {
     return (
       <>
         <Head>
-          <title>Loading Collection... | Alpine Creations</title>
+          <title>Loading Collection... | {logoConfig.text}</title>
         </Head>
         <LoadingScreen message="Loading Collection..." showProgress={true} progress={100} />
       </>
@@ -216,7 +265,7 @@ export default function CollectionSlugPage() {
     <>
       <Head>
         <title>
-          {collection.seoTitle || `${collection.name} - ${collection.subtitle}`} | Alpine Creations
+          {collection.name} | {logoConfig.text}
         </title>
         <meta name="description" content={collection.seoDescription || collection.description} />
       </Head>
@@ -238,7 +287,7 @@ export default function CollectionSlugPage() {
       {/* Production Sections */}
       {collection.production?.map((productionItem, index) => {
         // If item has title and description, render CollectionProduction
-        if (productionItem.title && productionItem.description) {
+        if (productionItem.title) {
           return <CollectionProduction key={index} productionItem={productionItem} />;
         }
 

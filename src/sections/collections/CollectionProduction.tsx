@@ -40,8 +40,7 @@ const StyledContainer = styled('div')(({ theme }) => ({
   alignItems: 'flex-start',
   justifyContent: 'space-between',
   gap: '80px',
-  padding: '0 10px',
-  maxWidth: '1400px !important',
+  paddingLeft: '80px',
   width: '100%',
   margin: '0 auto',
   [theme.breakpoints.down('md')]: {
@@ -51,6 +50,7 @@ const StyledContainer = styled('div')(({ theme }) => ({
   },
   [theme.breakpoints.down('sm')]: {
     padding: '0 20px',
+    paddingLeft: '20px',
   },
 }));
 

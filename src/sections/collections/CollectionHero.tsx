@@ -58,7 +58,7 @@ export default function CollectionHero({ collection }: CollectionHeroProps) {
       <StyledVideoOverlay />
 
       {/* Content */}
-      <Container maxWidth="xl" component={MotionContainer}>
+      <Container maxWidth={false} component={MotionContainer}>
         <StyledHeroContent>
           <Box
             sx={{

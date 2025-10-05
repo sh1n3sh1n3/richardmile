@@ -69,6 +69,7 @@ interface Collection {
   };
   createdAt: string;
   updatedAt: string;
+  isDefault?: boolean;
 }
 
 interface ApiResponse {

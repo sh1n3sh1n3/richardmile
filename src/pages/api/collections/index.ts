@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           query.featured = true;
         }
 
-        let cursor = collection.find(query).sort({ order: 1, createdAt: -1 });
+        let cursor = collection.find(query).sort({ isDefault: -1, order: 1, createdAt: -1 });
 
         // Apply limit if provided
         if (limit) {

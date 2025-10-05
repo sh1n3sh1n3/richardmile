@@ -38,8 +38,7 @@ const StyledRoot = styled('div')<{ backgroundColor: string }>(({ theme, backgrou
 }));
 
 const StyledContainer = styled('div')(({ theme }) => ({
-  padding: '0 10px',
-  maxWidth: '1400px !important',
+  padding: '0 80px',
   width: '100%',
   margin: '0 auto',
   [theme.breakpoints.down('sm')]: {

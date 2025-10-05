@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       case 'POST': {
-        const { slug, page } = req.body;
+        const { slug, page, isDefault } = req.body;
 
         // Validate slug for collections
         if (page === 'collections') {
@@ -44,6 +44,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               message: 'Slug must be unique. This slug already exists.',
             });
           }
+
+          // If setting as default, unset all other collections as default
+          if (isDefault) {
+            await collection.updateMany(
+              { page: 'collections', isDefault: true },
+              { $set: { isDefault: false } }
+            );
+          }
         }
 
         const newSection = await collection.insertOne({
@@ -56,8 +64,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       case 'PUT': {
-        const { id, _id, slug, page, ...updateData } = req.body;
-        console.log('PUT request data:', { id, _id, updateData });
+        const { id, _id, slug, page, isDefault, ...updateData } = req.body;
+        console.log('PUT request data:', { id, _id, isDefault, updateData });
 
         // Validate slug for collections
         if (page === 'collections' && slug !== undefined) {
@@ -83,16 +91,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
         }
 
-        await collection.updateOne(
-          { _id: new ObjectId(id) },
-          {
-            $set: {
-              ...updateData,
-              ...(page === 'collections' && slug ? { slug: slug.trim() } : {}),
-              updatedAt: new Date(),
-            },
-          }
-        );
+        // If setting as default, unset all other collections as default
+        if (page === 'collections' && isDefault) {
+          await collection.updateMany(
+            { page: 'collections', isDefault: true, _id: { $ne: new ObjectId(id) } },
+            { $set: { isDefault: false } }
+          );
+        }
+
+        const updateFields = {
+          ...updateData,
+          ...(page === 'collections' && slug ? { slug: slug.trim() } : {}),
+          ...(page === 'collections' && isDefault !== undefined ? { isDefault } : {}),
+          updatedAt: new Date(),
+        };
+
+        console.log('Updating collection with fields:', updateFields);
+
+        await collection.updateOne({ _id: new ObjectId(id) }, { $set: updateFields });
         return res.status(200).json({ message: 'Section updated successfully' });
       }
 

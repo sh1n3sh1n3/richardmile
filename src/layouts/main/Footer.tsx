@@ -30,7 +30,7 @@ export default function Footer() {
         bgcolor: 'background.default',
       }}
     >
-      <Container maxWidth="xl" sx={{ pt: 3 }}>
+      <Container maxWidth={false} sx={{ pt: 3 }}>
         <Typography variant="caption" sx={{ color: 'text.disabled', textTransform: 'uppercase' }}>
           {`Alpine Creations • ${pathname.split('/')[1] || 'Index'}`}
         </Typography>

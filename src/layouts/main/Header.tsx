@@ -48,7 +48,7 @@ export default function Header({ openNav, setOpenNav }: Props) {
       }}
     >
       <Toolbar sx={{ height: 1 }}>
-        <Container maxWidth="xl" sx={{ height: 1, display: 'flex', alignItems: 'center' }}>
+        <Container maxWidth={false} sx={{ height: 1, display: 'flex', alignItems: 'center' }}>
           <MenuButton openNav={openNav} setOpenNav={setOpenNav} />
 
           <Box
