@@ -47,8 +47,8 @@ interface Collection {
   seoDescription?: string;
   tags?: string[];
   background?: string;
+  backgroundIsVideo?: boolean;
   useDefaultData?: boolean;
-  isDefault?: boolean;
   specifications?: {
     movement: string;
     powerReserve: string;
@@ -141,19 +141,19 @@ export default function CollectionSlugPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch default collection data
-  const fetchDefaultCollection = async () => {
+  // Fetch global introduction data
+  const fetchGlobalIntroduction = async () => {
     try {
-      setLoadingMessage('Fetching default collection...');
-      const response = await fetch('/api/collections/default');
+      setLoadingMessage('Fetching default introduction...');
+      const response = await fetch('/api/cms/introduction');
       const result = await response.json();
 
-      if (result.success && result.data) {
-        return result.data;
+      if (result) {
+        return result;
       }
       return null;
     } catch (err) {
-      console.error('Error fetching default collection:', err);
+      console.error('Error fetching global introduction:', err);
       return null;
     }
   };
@@ -175,18 +175,26 @@ export default function CollectionSlugPage() {
 
       let collectionData = result.data;
 
-      // If this collection uses default data, fetch the first collection's data
+      // If this collection uses default data, fetch the global introduction data
       if (collectionData.useDefaultData) {
         setLoadingMessage('Fetching default data...');
-        const defaultCollection = await fetchDefaultCollection();
+        const globalIntroduction = await fetchGlobalIntroduction();
 
-        console.log(defaultCollection);
+        console.log(globalIntroduction);
 
-        if (defaultCollection) {
+        if (globalIntroduction) {
           collectionData = {
             ...collectionData,
-            introduction: defaultCollection.introduction,
-            production: defaultCollection.production,
+            introduction: {
+              title: globalIntroduction.title,
+              description: globalIntroduction.description,
+              images1: globalIntroduction.images1,
+              images2: globalIntroduction.images2,
+              images3: globalIntroduction.images3,
+              background: globalIntroduction.background,
+              backgroundIsVideo: globalIntroduction.backgroundIsVideo,
+            },
+            production: globalIntroduction.production,
           };
         }
       }
@@ -277,12 +285,23 @@ export default function CollectionSlugPage() {
             collection.background ||
             collection.introduction?.background ||
             'https://video.richardmille.com/desktop/1290861657.mp4',
+          backgroundIsVideo:
+            collection.backgroundIsVideo !== undefined
+              ? collection.backgroundIsVideo
+              : collection.introduction?.backgroundIsVideo !== undefined
+              ? collection.introduction.backgroundIsVideo
+              : true, // Default to video if not specified
         }}
       />
 
-      <CollectionIntroduction collection={collection} />
+      {/* Only show introduction and production if useDefaultData is not explicitly false */}
+      {collection.useDefaultData !== false && (
+        <>
+          <CollectionIntroduction collection={collection} />
 
-      <CollectionBackground collection={collection} />
+          <CollectionBackground collection={collection} />
+        </>
+      )}
 
       {/* Production Sections */}
       {collection.production?.map((productionItem, index) => {

@@ -19,7 +19,7 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Edit, Delete, Add, AddPhotoAlternate, Star } from '@mui/icons-material';
+import { Edit, Delete, Add, AddPhotoAlternate } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
 import CMSUpload from './CMSUpload';
 
@@ -112,7 +112,6 @@ interface CollectionItem {
   leftImage: string;
   rightImage: string;
   useDefaultData?: boolean; // New field to indicate if this collection should use default introduction and production data
-  isDefault?: boolean; // New field to mark this collection as the default collection
   order?: number; // Order field for sorting collections
 }
 
@@ -153,7 +152,6 @@ function createEmptyCollection(): CollectionItem {
     leftImage: '',
     rightImage: '',
     useDefaultData: false,
-    isDefault: false,
   };
 }
 
@@ -165,20 +163,6 @@ export default function CollectionsPageManager() {
   const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; name: string } | null>(null);
   const [dialogTab, setDialogTab] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
-
-  // Get the first collection's data for default values
-  const getFirstCollectionData = () => {
-    if (collections.length === 0) return null;
-    const firstCollection = collections.find((c) => c.order === 1) || collections[0];
-    return firstCollection;
-  };
-
-  // Check if this is the first collection (should not allow useDefaultData)
-  const isFirstCollection = () => {
-    if (!editing) return false;
-    const firstCollection = getFirstCollectionData();
-    return firstCollection && editing._id === firstCollection._id;
-  };
 
   useEffect(() => {
     fetchCollections();
@@ -221,16 +205,6 @@ export default function CollectionsPageManager() {
           : { ...withoutId, page: 'collections' };
       }
 
-      // Ensure isDefault field is included in the request
-      requestBody.isDefault = item.isDefault || false;
-
-      console.log(
-        'Saving collection with isDefault:',
-        item.isDefault,
-        'Request body:',
-        requestBody
-      );
-
       const response = await fetch('/api/cms/sections', {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -242,22 +216,9 @@ export default function CollectionsPageManager() {
         throw new Error(errorData.message || 'Save failed');
       }
 
-      const successMessage = item.isDefault
-        ? 'Collection saved and set as default successfully'
-        : 'Collection saved successfully';
-      enqueueSnackbar(successMessage, { variant: 'success' });
+      enqueueSnackbar('Collection saved successfully', { variant: 'success' });
       setEditDialog(false);
       setEditing(null);
-
-      // If this collection was set as default, update local state to unset others
-      if (item.isDefault) {
-        const updatedCollections = collections.map((c) => ({
-          ...c,
-          isDefault: c._id === item._id ? true : false,
-        }));
-        setCollections(updatedCollections);
-      }
-
       fetchCollections();
     } catch (error) {
       console.error('Save error:', error);
@@ -350,10 +311,7 @@ export default function CollectionsPageManager() {
               <StyledImage imageUp={item.imageUp} imageDown={item.imageDown} />
 
               <Stack sx={{ textAlign: 'center' }}>
-                <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
-                  <Typography variant="subtitle1">{item.name}</Typography>
-                  {item.isDefault && <Star color="primary" fontSize="small" />}
-                </Box>
+                <Typography variant="subtitle1">{item.name}</Typography>
                 <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
                   {item.label}
                 </Typography>
@@ -463,38 +421,6 @@ export default function CollectionsPageManager() {
                       onChange={(e) => updateEditing({ description: e.target.value })}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={editing.isDefault || false}
-                          onChange={(e) => {
-                            const newIsDefault = e.target.checked;
-
-                            // If setting this collection as default, unset all other collections as default
-                            if (newIsDefault) {
-                              const updatedCollections = collections.map((c) => ({
-                                ...c,
-                                isDefault: false,
-                              }));
-                              setCollections(updatedCollections);
-
-                              // Show confirmation message
-                              enqueueSnackbar(
-                                'This collection will be set as default. Remember to save to apply changes.',
-                                {
-                                  variant: 'info',
-                                }
-                              );
-                            }
-
-                            updateEditing({ isDefault: newIsDefault });
-                          }}
-                        />
-                      }
-                      label="Mark this collection as default collection"
-                    />
-                  </Grid>
                 </Grid>
               )}
 
@@ -559,218 +485,52 @@ export default function CollectionsPageManager() {
 
               {dialogTab === 2 && (
                 <Grid container spacing={2}>
-                  {/* Use Default Data Toggle - only show for non-first collections */}
-                  {!isFirstCollection() && (
+                  {/* Use Default Data Toggle */}
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={editing.useDefaultData || false}
+                          onChange={(e) => {
+                            const newUseDefaultData = e.target.checked;
+                            setEditing({
+                              ...editing,
+                              useDefaultData: newUseDefaultData,
+                              // Ensure introduction object is properly initialized
+                              introduction: editing.introduction || {
+                                title: '',
+                                description: '',
+                                images1: '',
+                                images2: '',
+                                images3: '',
+                                background: '',
+                                backgroundIsVideo: false,
+                              },
+                              // Ensure production array is properly initialized
+                              production: editing.production || [],
+                            });
+                          }}
+                        />
+                      }
+                      label="Use default data (Introduction and Production from global settings)"
+                    />
+                  </Grid>
+
+                  {editing.useDefaultData && (
                     <Grid item xs={12}>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={editing.useDefaultData || false}
-                            onChange={(e) => {
-                              const newUseDefaultData = e.target.checked;
-                              setEditing({
-                                ...editing,
-                                useDefaultData: newUseDefaultData,
-                                // Ensure introduction object is properly initialized
-                                introduction: editing.introduction || {
-                                  title: '',
-                                  description: '',
-                                  images1: '',
-                                  images2: '',
-                                  images3: '',
-                                  background: '',
-                                  backgroundIsVideo: false,
-                                },
-                                // Ensure production array is properly initialized
-                                production: editing.production || [],
-                              });
-                            }}
-                          />
-                        }
-                        label="Use Default Data (Introduction and Production from first collection)"
-                      />
+                      <Typography variant="body2" color="text.secondary">
+                        This collection will use the default introduction and production data
+                        configured in the Introduction tab.
+                      </Typography>
                     </Grid>
-                  )}
-
-                  {/* Introduction fields - hide if using default data */}
-                  {!editing.useDefaultData && (
-                    <>
-                      <Grid item xs={12}>
-                        <TextField
-                          fullWidth
-                          label="Intro Title"
-                          value={editing.introduction?.title || ''}
-                          onChange={(e) =>
-                            setEditing({
-                              ...editing,
-                              introduction: {
-                                ...(editing.introduction || {}),
-                                title: e.target.value,
-                              },
-                            })
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          fullWidth
-                          multiline
-                          rows={3}
-                          label="Intro Description"
-                          value={editing.introduction?.description || ''}
-                          onChange={(e) =>
-                            setEditing({
-                              ...editing,
-                              introduction: {
-                                ...(editing.introduction || {}),
-                                description: e.target.value,
-                              },
-                            })
-                          }
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Intro Image 1
-                        </Typography>
-                        <CMSUpload
-                          onUploadSuccess={(r) =>
-                            setEditing({
-                              ...editing,
-                              introduction: { ...(editing.introduction || {}), images1: r.url },
-                            })
-                          }
-                          accept={{ 'image/*': [] }}
-                          existingMedia={
-                            editing.introduction?.images1
-                              ? {
-                                  src: editing.introduction.images1,
-                                  isVideo: false,
-                                  fileName: 'intro1',
-                                }
-                              : undefined
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Intro Image 2
-                        </Typography>
-                        <CMSUpload
-                          onUploadSuccess={(r) =>
-                            setEditing({
-                              ...editing,
-                              introduction: { ...(editing.introduction || {}), images2: r.url },
-                            })
-                          }
-                          accept={{ 'image/*': [] }}
-                          existingMedia={
-                            editing.introduction?.images2
-                              ? {
-                                  src: editing.introduction.images2,
-                                  isVideo: false,
-                                  fileName: 'intro2',
-                                }
-                              : undefined
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={4}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Intro Image 3
-                        </Typography>
-                        <CMSUpload
-                          onUploadSuccess={(r) =>
-                            setEditing({
-                              ...editing,
-                              introduction: { ...(editing.introduction || {}), images3: r.url },
-                            })
-                          }
-                          accept={{ 'image/*': [] }}
-                          existingMedia={
-                            editing.introduction?.images3
-                              ? {
-                                  src: editing.introduction.images3,
-                                  isVideo: false,
-                                  fileName: 'intro3',
-                                }
-                              : undefined
-                          }
-                        />
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Intro Background (image/video)
-                        </Typography>
-                        <CMSUpload
-                          onUploadSuccess={(r) =>
-                            setEditing({
-                              ...editing,
-                              introduction: {
-                                ...(editing.introduction || {}),
-                                background: r.url,
-                                backgroundIsVideo: !!r.isVideo,
-                              },
-                            })
-                          }
-                          accept={{ 'video/*': [], 'image/*': [] }}
-                          existingMedia={
-                            editing.introduction?.background
-                              ? {
-                                  src: editing.introduction.background,
-                                  isVideo: !!editing.introduction.backgroundIsVideo,
-                                  fileName: 'introBackground',
-                                }
-                              : undefined
-                          }
-                        />
-                      </Grid>
-                    </>
                   )}
                 </Grid>
               )}
 
               {dialogTab === 3 && (
                 <Box>
-                  {/* Use Default Data Toggle - only show for non-first collections */}
-                  {!isFirstCollection() && (
-                    <Grid container spacing={2} sx={{ mb: 2 }}>
-                      <Grid item xs={12}>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={editing.useDefaultData || false}
-                              onChange={(e) => {
-                                const newUseDefaultData = e.target.checked;
-                                setEditing({
-                                  ...editing,
-                                  useDefaultData: newUseDefaultData,
-                                  // Ensure introduction object is properly initialized
-                                  introduction: editing.introduction || {
-                                    title: '',
-                                    description: '',
-                                    images1: '',
-                                    images2: '',
-                                    images3: '',
-                                    background: '',
-                                    backgroundIsVideo: false,
-                                  },
-                                  // Ensure production array is properly initialized
-                                  production: editing.production || [],
-                                });
-                              }}
-                            />
-                          }
-                          label="Use Default Data (Introduction and Production from first collection)"
-                        />
-                      </Grid>
-                    </Grid>
-                  )}
-
                   {/* Production fields - hide if using default data */}
-                  {!editing.useDefaultData && (
+                  {!editing.useDefaultData ? (
                     <>
                       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                         <Typography variant="subtitle1">Production Items</Typography>
@@ -866,6 +626,15 @@ export default function CollectionsPageManager() {
                         ))}
                       </Grid>
                     </>
+                  ) : (
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Typography variant="body2" color="text.secondary">
+                          This collection is using default production data from the Introduction
+                          tab.
+                        </Typography>
+                      </Grid>
+                    </Grid>
                   )}
                 </Box>
               )}

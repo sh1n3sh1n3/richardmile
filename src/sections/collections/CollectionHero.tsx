@@ -13,6 +13,7 @@ import { StyledHeroContent, StyledHeroVideo, StyledVideoOverlay } from '../styls
 interface CollectionHeroProps {
   collection?: {
     background: any;
+    backgroundIsVideo?: boolean;
     name: string;
     subtitle: string;
     description: string;
@@ -34,10 +35,11 @@ export default function CollectionHero({ collection }: CollectionHeroProps) {
   const heroContent = collection
     ? {
         video: collection.background, // Default video, can be customized per collection
+        isVideo: collection.backgroundIsVideo !== false, // Default to video if not specified
         title: collection.name,
         description: collection.description || collection.subtitle,
       }
-    : fallbackContent;
+    : { ...fallbackContent, isVideo: true };
 
   const scrollToCollectionContent = () => {
     const collectionContent = document.querySelector('[data-section="collection-content"]');
@@ -48,13 +50,29 @@ export default function CollectionHero({ collection }: CollectionHeroProps) {
 
   return (
     <Box sx={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
-      {/* Video Background */}
-      <StyledHeroVideo autoPlay muted loop playsInline preload="metadata">
-        <source src={heroContent.video} type="video/mp4" />
-        Your browser does not support the video tag.
-      </StyledHeroVideo>
+      {/* Background - Video or Image */}
+      {heroContent.isVideo ? (
+        <StyledHeroVideo autoPlay muted loop playsInline preload="metadata">
+          <source src={heroContent.video} type="video/mp4" />
+          Your browser does not support the video tag.
+        </StyledHeroVideo>
+      ) : (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: `url(${heroContent.video})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+      )}
 
-      {/* Video Overlay for better text readability */}
+      {/* Overlay for better text readability */}
       <StyledVideoOverlay />
 
       {/* Content */}
