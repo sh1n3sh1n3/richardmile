@@ -19,6 +19,7 @@ import {
   CollectionFeatures,
   CollectionImageGallery,
 } from 'src/sections/collections';
+import CollectionProductionSlider from 'src/sections/collections/CollectionProductionSlider';
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +50,12 @@ interface Collection {
   background?: string;
   backgroundIsVideo?: boolean;
   useDefaultData?: boolean;
+  useDefaultIntroductionData?: boolean;
+  useDefaultProductionData?: boolean;
+  globalProductionData?: {
+    title: string;
+    images: string[];
+  };
   specifications?: {
     movement: string;
     powerReserve: string;
@@ -158,6 +165,23 @@ export default function CollectionSlugPage() {
     }
   };
 
+  // Fetch global production data
+  const fetchGlobalProduction = async () => {
+    try {
+      setLoadingMessage('Fetching default production...');
+      const response = await fetch('/api/cms/production');
+      const result = await response.json();
+
+      if (result) {
+        return result;
+      }
+      return null;
+    } catch (err) {
+      console.error('Error fetching global production:', err);
+      return null;
+    }
+  };
+
   // Fetch collection data
   const fetchCollection = async (collectionSlug: string) => {
     try {
@@ -175,28 +199,54 @@ export default function CollectionSlugPage() {
 
       let collectionData = result.data;
 
-      // If this collection uses default data, fetch the global introduction data
-      if (collectionData.useDefaultData) {
-        setLoadingMessage('Fetching default data...');
-        const globalIntroduction = await fetchGlobalIntroduction();
+      // Fetch global data based on individual toggles
+      const fetchPromises = [];
 
-        console.log(globalIntroduction);
+      if (collectionData.useDefaultIntroductionData || collectionData.useDefaultData) {
+        fetchPromises.push(fetchGlobalIntroduction());
+      } else {
+        fetchPromises.push(Promise.resolve(null));
+      }
 
-        if (globalIntroduction) {
-          collectionData = {
-            ...collectionData,
-            introduction: {
-              title: globalIntroduction.title,
-              description: globalIntroduction.description,
-              images1: globalIntroduction.images1,
-              images2: globalIntroduction.images2,
-              images3: globalIntroduction.images3,
-              background: globalIntroduction.background,
-              backgroundIsVideo: globalIntroduction.backgroundIsVideo,
-            },
-            production: globalIntroduction.production,
-          };
-        }
+      if (collectionData.useDefaultProductionData || collectionData.useDefaultData) {
+        fetchPromises.push(fetchGlobalProduction());
+      } else {
+        fetchPromises.push(Promise.resolve(null));
+      }
+
+      const [globalIntroduction, globalProduction] = await Promise.all(fetchPromises);
+
+      console.log('Global introduction:', globalIntroduction);
+      console.log('Global production:', globalProduction);
+
+      // Apply global introduction data if needed
+      if (
+        (collectionData.useDefaultIntroductionData || collectionData.useDefaultData) &&
+        globalIntroduction
+      ) {
+        collectionData = {
+          ...collectionData,
+          introduction: {
+            title: globalIntroduction.title,
+            description: globalIntroduction.description,
+            images1: globalIntroduction.images1,
+            images2: globalIntroduction.images2,
+            images3: globalIntroduction.images3,
+            background: globalIntroduction.background,
+            backgroundIsVideo: globalIntroduction.backgroundIsVideo,
+          },
+        };
+      }
+
+      // Apply global production data if needed
+      if (
+        (collectionData.useDefaultProductionData || collectionData.useDefaultData) &&
+        globalProduction
+      ) {
+        collectionData = {
+          ...collectionData,
+          globalProductionData: globalProduction, // Store the global production data separately
+        };
       }
 
       setCollection(collectionData);
@@ -294,40 +344,49 @@ export default function CollectionSlugPage() {
         }}
       />
 
-      {/* Only show introduction and production if useDefaultData is not explicitly false */}
-      {collection.useDefaultData !== false && (
+      {/* Show introduction if useDefaultIntroductionData is true or useDefaultData is true */}
+      {(collection.useDefaultIntroductionData || collection.useDefaultData) && (
         <>
           <CollectionIntroduction collection={collection} />
-
           <CollectionBackground collection={collection} />
         </>
       )}
 
-      {/* Production Sections */}
-      {collection.production?.map((productionItem, index) => {
-        // If item has title and description, render CollectionProduction
-        if (productionItem.title) {
-          return <CollectionProduction key={index} productionItem={productionItem} />;
-        }
+      {/* Show production if useDefaultProductionData is true or useDefaultData is true */}
+      {(collection.useDefaultProductionData || collection.useDefaultData) && (
+        <>
+          {/* Production Section - Use slider for global production data */}
+          {collection.globalProductionData && (
+            <CollectionProductionSlider productionData={collection.globalProductionData} />
+          )}
 
-        // If item has only imageSource (no title/description), render CollectionBackground
-        if (productionItem.imageSource) {
-          return (
-            <CollectionBackground
-              key={index}
-              collection={{
-                introduction: {
-                  background: productionItem.imageSource,
-                  backgroundIsVideo: false,
-                },
-              }}
-            />
-          );
-        }
+          {/* Legacy production sections */}
+          {collection.production?.map((productionItem, index) => {
+            // If item has title and description, render CollectionProduction (legacy format)
+            if (productionItem.title && productionItem.description) {
+              return <CollectionProduction key={index} productionItem={productionItem} />;
+            }
 
-        // Skip rendering if no valid data
-        return null;
-      })}
+            // If item has only imageSource (no title/description), render CollectionBackground
+            if (productionItem.imageSource && !productionItem.title) {
+              return (
+                <CollectionBackground
+                  key={index}
+                  collection={{
+                    introduction: {
+                      background: productionItem.imageSource,
+                      backgroundIsVideo: false,
+                    },
+                  }}
+                />
+              );
+            }
+
+            // Skip rendering if no valid data
+            return null;
+          })}
+        </>
+      )}
 
       {/* Image Gallery Section */}
       {(collection.topImage ||

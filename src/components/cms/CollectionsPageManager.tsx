@@ -111,7 +111,9 @@ interface CollectionItem {
   buttomImage: string;
   leftImage: string;
   rightImage: string;
-  useDefaultData?: boolean; // New field to indicate if this collection should use default introduction and production data
+  useDefaultData?: boolean; // Legacy field - kept for backward compatibility
+  useDefaultIntroductionData?: boolean; // New field to indicate if this collection should use default introduction data
+  useDefaultProductionData?: boolean; // New field to indicate if this collection should use default production data
   order?: number; // Order field for sorting collections
 }
 
@@ -152,6 +154,8 @@ function createEmptyCollection(): CollectionItem {
     leftImage: '',
     rightImage: '',
     useDefaultData: false,
+    useDefaultIntroductionData: false,
+    useDefaultProductionData: false,
   };
 }
 
@@ -490,12 +494,12 @@ export default function CollectionsPageManager() {
                     <FormControlLabel
                       control={
                         <Switch
-                          checked={editing.useDefaultData || false}
+                          checked={editing.useDefaultIntroductionData || false}
                           onChange={(e) => {
-                            const newUseDefaultData = e.target.checked;
+                            const newUseDefaultIntroductionData = e.target.checked;
                             setEditing({
                               ...editing,
-                              useDefaultData: newUseDefaultData,
+                              useDefaultIntroductionData: newUseDefaultIntroductionData,
                               // Ensure introduction object is properly initialized
                               introduction: editing.introduction || {
                                 title: '',
@@ -506,21 +510,19 @@ export default function CollectionsPageManager() {
                                 background: '',
                                 backgroundIsVideo: false,
                               },
-                              // Ensure production array is properly initialized
-                              production: editing.production || [],
                             });
                           }}
                         />
                       }
-                      label="Use default data (Introduction and Production from global settings)"
+                      label="Use default introduction data (from Introduction tab)"
                     />
                   </Grid>
 
-                  {editing.useDefaultData && (
+                  {editing.useDefaultIntroductionData && (
                     <Grid item xs={12}>
                       <Typography variant="body2" color="text.secondary">
-                        This collection will use the default introduction and production data
-                        configured in the Introduction tab.
+                        This collection will use the default introduction data configured in the
+                        Introduction tab.
                       </Typography>
                     </Grid>
                   )}
@@ -528,115 +530,37 @@ export default function CollectionsPageManager() {
               )}
 
               {dialogTab === 3 && (
-                <Box>
-                  {/* Production fields - hide if using default data */}
-                  {!editing.useDefaultData ? (
-                    <>
-                      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                        <Typography variant="subtitle1">Production Items</Typography>
-                        <Button
-                          variant="contained"
-                          startIcon={<Add />}
-                          onClick={() =>
+                <Grid container spacing={2}>
+                  {/* Use Default Data Toggle */}
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={editing.useDefaultProductionData || false}
+                          onChange={(e) => {
+                            const newUseDefaultProductionData = e.target.checked;
                             setEditing({
                               ...editing,
-                              production: [
-                                ...(editing.production || []),
-                                { title: '', description: '', imageSource: '' },
-                              ],
-                            })
-                          }
-                        >
-                          Add Item
-                        </Button>
-                      </Box>
-                      <Grid container spacing={2}>
-                        {(editing.production || []).map((p, idx) => (
-                          <Grid key={idx} item xs={12}>
-                            <Card variant="outlined">
-                              <CardContent>
-                                <Grid container spacing={2}>
-                                  <Grid item xs={12}>
-                                    <TextField
-                                      fullWidth
-                                      label="Title"
-                                      value={p.title}
-                                      onChange={(e) => {
-                                        const next = [...(editing.production || [])];
-                                        next[idx] = { ...next[idx], title: e.target.value };
-                                        setEditing({ ...editing, production: next });
-                                      }}
-                                    />
-                                  </Grid>
-                                  <Grid item xs={12}>
-                                    <TextField
-                                      fullWidth
-                                      multiline
-                                      rows={4}
-                                      label="Description"
-                                      value={p.description}
-                                      onChange={(e) => {
-                                        const next = [...(editing.production || [])];
-                                        next[idx] = { ...next[idx], description: e.target.value };
-                                        setEditing({ ...editing, production: next });
-                                      }}
-                                    />
-                                  </Grid>
-                                  <Grid item xs={12}>
-                                    <Typography variant="subtitle2" gutterBottom>
-                                      Image
-                                    </Typography>
-                                    <CMSUpload
-                                      onUploadSuccess={(r) => {
-                                        const next = [...(editing.production || [])];
-                                        next[idx] = { ...next[idx], imageSource: r.url };
-                                        setEditing({ ...editing, production: next });
-                                      }}
-                                      accept={{ 'image/*': [] }}
-                                      existingMedia={
-                                        p.imageSource
-                                          ? {
-                                              src: p.imageSource,
-                                              isVideo: false,
-                                              fileName: `production-${idx}`,
-                                            }
-                                          : undefined
-                                      }
-                                    />
-                                  </Grid>
-                                  <Grid item xs={12}>
-                                    <Box display="flex" justifyContent="flex-end">
-                                      <Button
-                                        color="error"
-                                        onClick={() => {
-                                          const next = (editing.production || []).filter(
-                                            (_, i) => i !== idx
-                                          );
-                                          setEditing({ ...editing, production: next });
-                                        }}
-                                      >
-                                        Remove
-                                      </Button>
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </CardContent>
-                            </Card>
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </>
-                  ) : (
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <Typography variant="body2" color="text.secondary">
-                          This collection is using default production data from the Introduction
-                          tab.
-                        </Typography>
-                      </Grid>
+                              useDefaultProductionData: newUseDefaultProductionData,
+                              // Ensure production array is properly initialized
+                              production: editing.production || [],
+                            });
+                          }}
+                        />
+                      }
+                      label="Use default production data"
+                    />
+                  </Grid>
+
+                  {editing.useDefaultProductionData && (
+                    <Grid item xs={12}>
+                      <Typography variant="body2" color="text.secondary">
+                        This collection will use the default production items configured in the
+                        Production Items tab.
+                      </Typography>
                     </Grid>
                   )}
-                </Box>
+                </Grid>
               )}
 
               {dialogTab === 5 && (

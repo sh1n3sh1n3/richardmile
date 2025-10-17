@@ -6,6 +6,7 @@ import FriendsPageManager from 'src/components/cms/FriendsPageManager';
 import CollectionsPageManager from 'src/components/cms/CollectionsPageManager';
 import FriendsHeroManager from 'src/components/cms/FriendsHeroManager';
 import IntroductionManager from 'src/components/cms/IntroductionManager';
+import ProductionItemsManager from 'src/components/cms/ProductionItemsManager';
 import { FriendsHeroProvider } from 'src/contexts/FriendsHeroContext';
 import LogoManager from 'src/components/cms/LogoManager';
 import { PageHead } from 'src/components/head';
@@ -94,6 +95,7 @@ export default function CMSPage() {
           <Tab label="Friends Hero" />
           <Tab label="Collections" />
           <Tab label="Introduction" />
+          <Tab label="Production Items" />
           <Tab label="Logo" />
         </Tabs>
       </Box>
@@ -119,6 +121,10 @@ export default function CMSPage() {
       </TabPanel>
 
       <TabPanel value={tabValue} index={5}>
+        <ProductionItemsManager />
+      </TabPanel>
+
+      <TabPanel value={tabValue} index={6}>
         <LogoManager />
       </TabPanel>
     </FriendsHeroProvider>
