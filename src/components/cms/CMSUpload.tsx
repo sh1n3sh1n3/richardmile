@@ -18,6 +18,21 @@ const StyledDropZone = styled('div')(({ theme }) => ({
   },
 }));
 
+const StyledDropZoneNoPadding = styled('div')(({ theme }) => ({
+  outline: 'none',
+  cursor: 'pointer',
+  overflow: 'hidden',
+  position: 'relative',
+  padding: 0,
+  borderRadius: theme.shape.borderRadius,
+  transition: theme.transitions.create('padding'),
+  backgroundColor: 'transparent',
+  border: `2px dashed ${theme.palette.grey[400]}`,
+  '&:hover': {
+    opacity: 0.72,
+  },
+}));
+
 // Simple Media Preview Component
 const SimpleMediaPreview = ({
   src,
@@ -99,6 +114,7 @@ interface CMSUploadProps {
   accept?: { [key: string]: string[] };
   maxSize?: number;
   existingMedia?: { src: string; isVideo: boolean; fileName: string };
+  keepContentAfterUpload?: boolean;
 }
 
 export default function CMSUpload({
@@ -106,6 +122,7 @@ export default function CMSUpload({
   accept = { 'video/*': [], 'image/*': [] },
   maxSize = 50 * 1024 * 1024, // 50MB
   existingMedia,
+  keepContentAfterUpload = false,
 }: CMSUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -207,10 +224,12 @@ export default function CMSUpload({
     multiple: false,
   });
 
+  const DropZoneComponent = keepContentAfterUpload ? StyledDropZoneNoPadding : StyledDropZone;
+
   return (
     <Box>
       {/* Always show drag & drop zone, with uploaded files as previews above */}
-      <StyledDropZone
+      <DropZoneComponent
         {...getRootProps()}
         sx={{
           ...(isDragActive && {
@@ -230,7 +249,7 @@ export default function CMSUpload({
         <input {...getInputProps()} />
 
         {/* Show uploaded file preview when adding new */}
-        {uploadedFile && !uploading && (
+        {uploadedFile && !uploading && !keepContentAfterUpload && (
           <Box sx={{ mb: 2, textAlign: 'center' }}>
             <SimpleMediaPreview
               src={uploadedFile.url}
@@ -259,7 +278,7 @@ export default function CMSUpload({
           </Box>
         )}
 
-        <Box textAlign="center">
+        <Box textAlign="center" sx={{ p: keepContentAfterUpload ? 2 : 0 }}>
           <Typography variant="h6" gutterBottom>
             {isDragActive ? 'Drop the file here...' : 'Upload file'}
             <Typography variant="body2" color="text.secondary">
@@ -277,7 +296,7 @@ export default function CMSUpload({
             </Button>
           )} */}
         </Box>
-      </StyledDropZone>
+      </DropZoneComponent>
 
       {uploading && (
         <Box sx={{ mt: 2 }}>

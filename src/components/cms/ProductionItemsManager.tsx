@@ -106,6 +106,20 @@ export default function ProductionItemsManager() {
                 Production Images
               </Typography>
               <Grid container spacing={2}>
+                {/* Upload component always first */}
+                <Grid item xs={12} sm={3} md={4}>
+                  <CMSUpload
+                    onUploadSuccess={(r) => {
+                      const next = [...(production.images || []), r.url];
+                      updateProduction({ images: next });
+                    }}
+                    accept={{ 'image/*': [] }}
+                    existingMedia={undefined}
+                    keepContentAfterUpload={true}
+                  />
+                </Grid>
+
+                {/* Existing images */}
                 {(production.images || []).map((image, idx) => (
                   <Grid key={idx} item xs={12} sm={6} md={4}>
                     <Card variant="outlined">
@@ -138,28 +152,6 @@ export default function ProductionItemsManager() {
                     </Card>
                   </Grid>
                 ))}
-
-                <Grid item xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ height: '100%' }}>
-                    <CardContent
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: 200,
-                      }}
-                    >
-                      <CMSUpload
-                        onUploadSuccess={(r) => {
-                          const next = [...(production.images || []), r.url];
-                          updateProduction({ images: next });
-                        }}
-                        accept={{ 'image/*': [] }}
-                        existingMedia={undefined}
-                      />
-                    </CardContent>
-                  </Card>
-                </Grid>
               </Grid>
             </Grid>
           </Grid>
